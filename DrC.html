@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Random Prompt Redirect</title>
+<script>
+        // List your URLs here
+        const urls = [
+            "https://tinyurl.com/59tnn4e9",
+            "https://kb.tree-nation.com/knowledge/recurrent-plantation",
+            "https://kb.tree-nation.com/knowledge/eventbrite-integration"
+        ];
+ 
+        // Function to pick a random URL
+        function redirectRandomly() {
+            const randomIndex = Math.floor(Math.random() * urls.length);
+            window.location.href = urls[randomIndex];
+        }
+ 
+        // Automatically redirect when page loads
+        window.onload = redirectRandomly;
+</script>
+</head>
+<body>
+<p>If you are not redirected automatically, <a href="#" onclick="redirectRandomly()">click here</a>.</p>
+</body>
+</html>
