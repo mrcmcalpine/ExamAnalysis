@@ -63,7 +63,7 @@
      <h2>Analysis Table</h2>
      <table id="resultsTable"></table>
 
-      <a href="path/to/your/file.ext" download class="download-button">Download Template</a>
+      <a href="https://github.com/mrcmcalpine/ExamAnalysis/blob/main/SampleFile.xlsx" download class="download-button">Download Template</a>
 
      
      <script>
