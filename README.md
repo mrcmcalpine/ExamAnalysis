@@ -30,6 +30,20 @@
 .btn:hover {
   background-color: RoyalBlue;
 }
+
+.download-button {
+      font-size: 14px;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .download-button:hover {
+      background-color: #45a049;
+    }
      </style>
  </head>
  <body>
@@ -49,7 +63,8 @@
      <h2>Analysis Table</h2>
      <table id="resultsTable"></table>
 
-     <button class="btn"><i class="fa fa-download"></i> Download Template File</button>
+      <a href="path/to/your/file.ext" download class="download-button">Download Template</a>
+
      
      <script>
          document.getElementById('fileInput').addEventListener('change', handleFile);
