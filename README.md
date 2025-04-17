@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
  <html lang="en">
  <head>
      <meta charset="UTF-8">
@@ -14,6 +14,22 @@
          table { width: 80%; margin: 20px auto; border-collapse: collapse; }
          th, td { border: 1px solid black; padding: 8px; text-align: center; }
          th { background-color: #f2f2f2; }
+
+
+      /* Style buttons */
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
      </style>
  </head>
  <body>
@@ -32,6 +48,8 @@
      </div>
      <h2>Analysis Table</h2>
      <table id="resultsTable"></table>
+
+     <button class="btn"><i class="fa fa-download"></i> Download Template File</button>
      
      <script>
          document.getElementById('fileInput').addEventListener('change', handleFile);
