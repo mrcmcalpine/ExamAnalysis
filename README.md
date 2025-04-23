@@ -7,6 +7,43 @@
      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+
+
+  <!-- Add these to the HTML head if not already included -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+async function capturePageToPDF() {
+  const { jsPDF } = window.jspdf;
+  const fileName = prompt("Enter a name for the PDF file:");
+  if (!fileName) return;
+
+  // Create a header element
+  const header = document.createElement('div');
+  header.textContent = fileName;
+  header.style.fontSize = '24px';
+  header.style.fontWeight = 'bold';
+  header.style.margin = '20px';
+  document.body.insertBefore(header, document.body.firstChild);
+
+  // Capture the whole body
+  const canvas = await html2canvas(document.body);
+  const imgData = canvas.toDataURL('image/png');
+
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'px',
+    format: [canvas.width, canvas.height]
+  });
+
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  pdf.save(fileName + ".pdf");
+
+  // Clean up header if needed
+  header.remove();
+}
+</script>
      <style>
          body { font-family: Arial, sans-serif; text-align: center; }
          #chartContainer { display: flex; justify-content: space-around; margin-top: 20px; }
@@ -49,7 +86,7 @@
  <body>
      <h1>CSV Analysis Tool</h1>
      <input type="file" id="fileInput" accept=".csv">
-     <button onclick="exportToPDF()">Export to PDF</button>
+     <button onclick="capturePageToPDF()">Export to PDF</button>
      <div id="chartContainer">
          <div>
              <h3>Subject Area Analysis</h3>
