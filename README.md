@@ -19,28 +19,44 @@ async function capturePageToPDF() {
   const fileName = prompt("Enter a name for the PDF file:");
   if (!fileName) return;
 
-  // Create a header element
+  // Temporarily add the header
   const header = document.createElement('div');
   header.textContent = fileName;
   header.style.fontSize = '24px';
   header.style.fontWeight = 'bold';
   header.style.margin = '20px';
+  header.style.textAlign = 'center';
   document.body.insertBefore(header, document.body.firstChild);
 
-  // Capture the whole body
-  const canvas = await html2canvas(document.body);
+  // Wait for header to render
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  // Capture screenshot of the body
+  const canvas = await html2canvas(document.body, {
+    useCORS: true,
+    scale: 2
+  });
+
   const imgData = canvas.toDataURL('image/png');
 
   const pdf = new jsPDF({
     orientation: 'portrait',
-    unit: 'px',
-    format: [canvas.width, canvas.height]
+    unit: 'mm',
+    format: 'a4'
   });
 
-  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgProps = pdf.getImageProperties(imgData);
+  const pdfWidth = pageWidth;
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
   pdf.save(fileName + ".pdf");
 
-  // Clean up header if needed
+  // Clean up header after save
   header.remove();
 }
 </script>
@@ -84,7 +100,7 @@ async function capturePageToPDF() {
      </style>
  </head>
  <body>
-     <h1>CSV Analysis Tool</h1>
+     <h1>CSV Analysis Tool - April 2025</h1>
      <input type="file" id="fileInput" accept=".csv">
      <button onclick="capturePageToPDF()">Export to PDF</button>
      <div id="chartContainer">
