@@ -62,8 +62,17 @@ async function capturePageToPDF() {
 </script>
      <style>
          body { font-family: Arial, sans-serif; text-align: center; }
-         #chartContainer { display: flex; justify-content: space-around; margin-top: 20px; }
-         canvas { max-width: 400px; }
+         #chartContainer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  gap: 40px;
+}
+canvas {
+  width: 100% !important;
+  max-width: 500px;
+  height: auto !important;
+}
          table { width: 80%; margin: 20px auto; border-collapse: collapse; }
          th, td { border: 1px solid black; padding: 8px; text-align: center; }
          th { background-color: #f2f2f2; }
