@@ -122,8 +122,13 @@ canvas {
              <canvas id="questionChart"></canvas>
          </div>
      </div>
-     <h2>Analysis Table</h2>
-     <table id="resultsTable"></table>
+    
+
+     <h2>Subject Analysis</h2>
+<table id="subjectTable"></table>
+
+<h2>Question Type Analysis</h2>
+<table id="questionTypeTable"></table>
 
       <a href="https://github.com/mrcmcalpine/ExamAnalysis/raw/refs/heads/main/SampleFile.xlsx" download class="download-button">Download Template</a>
 
@@ -209,15 +214,18 @@ canvas {
          }
          
          function createTable(subjects, questionTypes) {
-             let table = '<tr><th>Category</th><th>Achieved</th><th>Possible</th><th>Percentage</th></tr>';
-             Object.keys(subjects).forEach(key => {
-                 table += `<tr><td>${key}</td><td>${subjects[key].achieved}</td><td>${subjects[key].possible}</td><td>${subjects[key].percentage.toFixed(2)}%</td></tr>`;
-             });
-             Object.keys(questionTypes).forEach(key => {
-                 table += `<tr><td>${key}</td><td>${questionTypes[key].achieved}</td><td>${questionTypes[key].possible}</td><td>${questionTypes[key].percentage.toFixed(2)}%</td></tr>`;
-             });
-             document.getElementById('resultsTable').innerHTML = table;
-         }
+    let subjectTable = '<tr><th>Subject</th><th>Achieved</th><th>Possible</th><th>Percentage</th></tr>';
+    Object.keys(subjects).forEach(key => {
+        subjectTable += `<tr><td>${key}</td><td>${subjects[key].achieved}</td><td>${subjects[key].possible}</td><td>${subjects[key].percentage.toFixed(2)}%</td></tr>`;
+    });
+    document.getElementById('subjectTable').innerHTML = subjectTable;
+
+    let questionTable = '<tr><th>Question Type</th><th>Achieved</th><th>Possible</th><th>Percentage</th></tr>';
+    Object.keys(questionTypes).forEach(key => {
+        questionTable += `<tr><td>${key}</td><td>${questionTypes[key].achieved}</td><td>${questionTypes[key].possible}</td><td>${questionTypes[key].percentage.toFixed(2)}%</td></tr>`;
+    });
+    document.getElementById('questionTypeTable').innerHTML = questionTable;
+}
      </script>
  </body>
  </html>
