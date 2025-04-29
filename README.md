@@ -202,14 +202,35 @@ canvas {
                      }]
                  },
                  options: {
-                     scales: {
-                         r: {
-                             suggestedMin: 0,
-                             suggestedMax: 100,
-                             pointLabels: { font: { weight: 'bold' } }
-                         }
-                     }
-                 }
+    scales: {
+        r: {
+            suggestedMin: 0,
+            suggestedMax: 100,
+            pointLabels: {
+                font: {
+                    size: 16,      // 🔍 Make labels bigger
+                    weight: 'bold'
+                },
+                color: '#000'    // Optional: make sure they're readable
+            },
+            ticks: {
+                backdropColor: 'transparent', // Removes the white boxes behind numbers
+                font: {
+                    size: 12
+                }
+            }
+        }
+    },
+    plugins: {
+        legend: {
+            labels: {
+                font: {
+                    size: 14
+                }
+            }
+        }
+    }
+}
              });
          }
          
