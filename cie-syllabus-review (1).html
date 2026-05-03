@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIE CS 0478 — Self Review 2026–2028</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0f13;--bg1:#14161c;--bg2:#1c1f28;--bg3:#232738;
+  --border:#2e3348;--border2:#3d4560;--border3:#515d82;
+  --text:#e8eaf2;--text2:#a0a8c0;--text3:#6b748f;
+  --red:#ff4d6d;--amber:#f59e0b;--green:#10b981;
+  --acc:#7ee8c8;--acc2:#4fd1c5;--ao3:#fbbf24;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Fraunces',serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 20% 0%,rgba(126,232,200,0.04),transparent 60%),
+             radial-gradient(ellipse 60% 40% at 80% 100%,rgba(167,139,250,0.04),transparent 60%);
+  pointer-events:none;z-index:0}
+.wrap{max-width:1380px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+/* HEADER */
+.site-header{padding:24px 0 0;border-bottom:1px solid var(--border);margin-bottom:24px}
+.site-header .wrap{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:18px;flex-wrap:wrap}
+.brand-name{font-size:11px;font-family:'DM Mono',monospace;color:var(--acc);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.brand-title{font-size:28px;font-weight:800;line-height:1.1}
+.brand-title em{font-style:italic;font-weight:300;color:var(--text2)}
+.header-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:7px;font-size:11.5px;font-weight:500;cursor:pointer;border:none;font-family:'DM Mono',monospace;transition:all .18s;white-space:nowrap}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}.btn-ghost:hover{border-color:var(--border3);color:var(--text)}
+.btn-danger{background:transparent;border:1px solid rgba(255,77,109,.3);color:var(--red)}.btn-danger:hover{background:rgba(255,77,109,.08);border-color:var(--red)}
+
+/* NAV */
+.nav-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px;overflow-x:auto}
+.nav-tab{padding:8px 16px;font-size:11.5px;font-family:'DM Mono',monospace;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;position:relative;bottom:-1px;white-space:nowrap}
+.nav-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.nav-tab:hover:not(.active){color:var(--text2)}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;margin-bottom:24px}
+.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+.stat-label{font-size:9.5px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:800;font-family:'DM Mono',monospace;line-height:1}
+.stat-sub{font-size:10px;color:var(--text3);margin-top:3px;font-family:'DM Mono',monospace}
+.pb{margin-top:7px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.pb-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width .6s ease}
+
+/* SECTIONS */
+.sections-grid{display:flex;flex-direction:column;gap:10px}
+.section-card{background:var(--bg1);border:1px solid var(--border);border-radius:11px;overflow:hidden}
+.section-head{padding:13px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:background .18s}
+.section-head:hover{background:var(--bg2)}
+.section-ring{position:relative;flex-shrink:0}
+.section-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--bg3);stroke-width:3}
+.ring-fg{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s,stroke .3s}
+.ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8.5px;font-weight:500}
+.section-info{flex:1;min-width:0}
+.section-num{font-size:9.5px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.section-name{font-size:14.5px;font-weight:600;color:var(--text);margin-top:1px;line-height:1.3}
+.section-meta{display:flex;gap:10px;margin-top:4px;align-items:center;flex-wrap:wrap}
+.section-score{font-family:'DM Mono',monospace;font-size:12px;font-weight:500}
+.section-count{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace}
+.section-toggle{color:var(--text3);transition:transform .25s;flex-shrink:0;font-size:11px}
+.section-card.open .section-toggle{transform:rotate(180deg)}
+.section-body{display:none;border-top:1px solid var(--border)}
+.section-card.open .section-body{display:block}
+
+/* SYLLABUS ROWS — KEY VISIBILITY FIX */
+.syl-row{display:flex;align-items:center;gap:9px;padding:9px 17px;border-bottom:1px solid var(--border);transition:background .15s;position:relative}
+.syl-row:last-child{border-bottom:none}
+.syl-row:hover{background:rgba(255,255,255,0.016)}
+/* Unreviewed: opacity 0.6 (not 0.38) so text is readable */
+.syl-row.rated-0{opacity:.6}
+.syl-lbar{width:3px;align-self:stretch;border-radius:0 2px 2px 0;flex-shrink:0;min-height:18px;transition:background .3s}
+.syl-code{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text3);min-width:40px;flex-shrink:0}
+/* Unreviewed text: var(--text2) — clearly readable on dark bg */
+.syl-text{flex:1;font-size:12px;font-family:'DM Mono',monospace;color:var(--text2);line-height:1.55}
+.syl-text.ao3-text{color:var(--text)}
+.ao3-badge{font-size:8.5px;font-family:'DM Mono',monospace;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);color:var(--ao3);border-radius:3px;padding:1px 5px;flex-shrink:0;white-space:nowrap}
+.syl-trend{font-size:11px;width:15px;text-align:center;flex-shrink:0}
+.stars{display:flex;gap:2px;flex-shrink:0}
+.star-btn{width:23px;height:23px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10.5px;transition:all .12s;font-family:'DM Mono',monospace;color:var(--text3)}
+.star-btn:hover{border-color:var(--border3);background:var(--bg3);color:var(--text2)}
+.star-btn.active-1,.star-btn.active-2{background:rgba(255,77,109,.18);border-color:rgba(255,77,109,.45);color:var(--red)}
+.star-btn.active-3{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:var(--amber)}
+.star-btn.active-4,.star-btn.active-5{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.4);color:var(--green)}
+
+/* RANKING */
+.rank-controls{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search-input{background:var(--bg1);border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-family:'DM Mono',monospace;font-size:11.5px;color:var(--text);outline:none;width:220px;transition:border-color .2s}
+.search-input:focus{border-color:var(--border3)}
+.search-input::placeholder{color:var(--text3)}
+.filter-btn{background:var(--bg1);border:1px solid var(--border);border-radius:6px;padding:5px 11px;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--text2);cursor:pointer;transition:all .18s}
+.filter-btn.active{border-color:var(--acc);color:var(--acc);background:rgba(126,232,200,.06)}
+.rank-table{width:100%;border-collapse:collapse}
+.rank-table th{text-align:left;padding:7px 11px;font-size:9.5px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg1);position:sticky;top:0;z-index:10}
+.rank-table td{padding:8px 11px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:11px;vertical-align:middle}
+.rank-table tr:last-child td{border-bottom:none}
+.rank-table tr:hover td{background:rgba(255,255,255,.016)}
+/* Unreviewed ranking rows — readable opacity */
+.rank-table tr.unreviewed td{opacity:.5}
+.rank-num{color:var(--text3);width:26px}
+.rank-score{font-size:14px;font-weight:500;width:38px}
+.rank-bar-cell{width:90px}
+.rank-bar{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+.rank-section{color:var(--text3);font-size:9.5px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-text{color:var(--text2);font-size:11px;line-height:1.45;max-width:400px}
+.rank-trend{width:20px;text-align:center;font-size:12px}
+.rank-weight{width:50px;text-align:center}
+
+/* PRINT VIEW */
+.print-summary{max-width:760px}
+.print-card{background:var(--bg1);border:1px solid var(--border);border-radius:11px;padding:20px;margin-bottom:16px}
+.print-card h2{font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:14px}
+.psec-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:11.5px}
+.psec-row:last-child{border-bottom:none}
+.pweak{padding:9px 0;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace}
+.pweak:last-child{border-bottom:none}
+.pweak-top{font-size:10.5px;display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.pweak-txt{font-size:11.5px;color:var(--text2);line-height:1.45}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.mstat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center}
+.mstat-v{font-size:28px;font-weight:800;font-family:'DM Mono',monospace;line-height:1}
+.mstat-l{font-size:9.5px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--bg1);border:1px solid var(--acc);border-radius:9px;padding:8px 13px;font-family:'DM Mono',monospace;font-size:11px;color:var(--acc);z-index:9000;transform:translateY(70px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.toast.on{transform:translateY(0);opacity:1}
+
+.view{display:none}.view.active{display:block}
+#csv-upload{display:none}
+.empty{text-align:center;padding:44px 20px;color:var(--text3);font-family:'DM Mono',monospace;font-size:11.5px}
+
+@media print{
+  body{background:#fff;color:#000}
+  .site-header,.nav-tabs,.header-actions,.btn,.stars,.rank-controls,.section-toggle,.syl-trend,.syl-lbar{display:none!important}
+  .section-body,.view{display:block!important}
+  #view-overview,#view-ranking{display:none!important}
+  .section-card,.print-card{border:1px solid #ddd!important;margin-bottom:6px}
+  .syl-text,.rank-text,.pweak-txt{color:#333!important}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="csv-upload" accept=".csv" onchange="importCSV(event)">
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-name">CIE IGCSE Computer Science 0478 · 2026–2028</div>
+      <h1 class="brand-title">Syllabus <em>Self-Review</em></h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('csv-upload').click()">⬆ Import CSV</button>
+      <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn btn-ghost" onclick="switchView('print-view')">🖨 Print Summary</button>
+      <button class="btn btn-danger" onclick="if(confirm('Reset ALL ratings?'))resetAll()">↺ Reset</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-view="overview">Overview</div>
+    <div class="nav-tab" data-view="ranking">Ranking Table</div>
+    <div class="nav-tab" data-view="print-view">Print Summary</div>
+  </div>
+
+  <div class="view active" id="view-overview">
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="sections-grid" id="sections-grid"></div>
+  </div>
+
+  <div class="view" id="view-ranking">
+    <div class="rank-controls">
+      <input class="search-input" id="rank-search" placeholder="Search statements…" oninput="renderRanking()">
+      <button class="filter-btn active" id="f-all"        onclick="setFilter('all')">All</button>
+      <button class="filter-btn"        id="f-weak"       onclick="setFilter('weak')">Weak (1–2)</button>
+      <button class="filter-btn"        id="f-mid"        onclick="setFilter('mid')">Mid (3)</button>
+      <button class="filter-btn"        id="f-strong"     onclick="setFilter('strong')">Strong (4–5)</button>
+      <button class="filter-btn"        id="f-unreviewed" onclick="setFilter('unreviewed')">Unreviewed</button>
+      <button class="filter-btn"        id="f-ao3"        onclick="setFilter('ao3')">AO3 ×1.5</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rank-table">
+        <thead><tr>
+          <th class="rank-num">#</th>
+          <th style="width:44px">Score</th>
+          <th class="rank-bar-cell">Bar</th>
+          <th class="rank-weight">Weight</th>
+          <th style="width:110px">Topic</th>
+          <th>Statement</th>
+          <th class="rank-trend">Δ</th>
+        </tr></thead>
+        <tbody id="rank-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="view" id="view-print-view">
+    <div class="print-summary" id="print-content"></div>
+  </div>
+</div>
+
+<script>
+// ── AO3 AUTO-DETECTION ──
+const AO3 = /^(describe|explain|evaluate|compare|justify|analyse|analyze|discuss|assess|distinguish|examine|contrast|demonstrate)/i;
+
+// ══════════════════════════════════════════════════════
+// 2026–2028 SYLLABUS  (10 topics, Papers 1 & 2)
+// ══════════════════════════════════════════════════════
+const SYLLABUS = [
+{id:'s1',num:'1',name:'Data Representation',paper:1,statements:[
+  {id:'1.1.1',text:'Understand how and why computers use binary to represent all forms of data'},
+  {id:'1.1.2',text:'Understand the denary, binary and hexadecimal number systems'},
+  {id:'1.1.3',text:'Convert between positive denary, positive binary and positive hexadecimal (both directions)'},
+  {id:'1.1.4',text:'Understand how and why hexadecimal is used as a beneficial method of data representation'},
+  {id:'1.1.5',text:'Add two positive 8-bit binary integers and understand the concept of overflow'},
+  {id:'1.1.6',text:'Perform a logical binary shift on a positive 8-bit binary integer and understand the effect'},
+  {id:'1.1.7',text:'Use two\'s complement to represent positive and negative 8-bit binary integers'},
+  {id:'1.2.1',text:'Understand how and why a computer represents text using character sets including ASCII and Unicode'},
+  {id:'1.2.2',text:'Understand how and why a computer represents sound including sample rate and sample resolution'},
+  {id:'1.2.3',text:'Understand how and why a computer represents an image including resolution and colour depth'},
+  {id:'1.3.1',text:'Understand how data storage is measured: bit, nibble, byte, KiB, MiB, GiB, TiB, PiB, EiB'},
+  {id:'1.3.2',text:'Calculate the file size of an image and a sound file using given information'},
+  {id:'1.3.3',text:'Understand the purpose of and need for data compression'},
+  {id:'1.3.4',text:'Understand lossy and lossless compression including run-length encoding (RLE)'},
+]},
+{id:'s2',num:'2',name:'Data Transmission',paper:1,statements:[
+  {id:'2.1.1',text:'Understand that data is broken down into packets to be transmitted'},
+  {id:'2.1.2',text:'Describe the structure of a packet: header (destination, packet number, originator address), payload, trailer'},
+  {id:'2.1.3',text:'Describe the process of packet switching'},
+  {id:'2.1.4',text:'Describe serial, parallel, simplex, half-duplex and full-duplex data transmission methods'},
+  {id:'2.1.5',text:'Explain the suitability of each transmission method for a given scenario'},
+  {id:'2.1.6',text:'Understand the USB interface and explain how it is used to transmit data'},
+  {id:'2.2.1',text:'Understand the need to check for errors after data transmission and how errors can occur'},
+  {id:'2.2.2',text:'Describe parity check (odd and even, including parity byte and block), checksum and echo check'},
+  {id:'2.2.3',text:'Describe how a check digit detects errors in data entry including ISBN and barcodes'},
+  {id:'2.2.4',text:'Describe how ARQ (automatic repeat query) establishes that data is received without error'},
+  {id:'2.3.1',text:'Understand the need for and purpose of encryption when transmitting data'},
+  {id:'2.3.2',text:'Understand symmetric and asymmetric encryption including public and private keys'},
+]},
+{id:'s3',num:'3',name:'Hardware',paper:1,statements:[
+  {id:'3.1.1',text:'Understand the role of the CPU and what is meant by a microprocessor'},
+  {id:'3.1.2',text:'Understand the purpose of Von Neumann CPU components: ALU, CU, registers (PC, MAR, MDR, CIR, ACC) and buses'},
+  {id:'3.1.3',text:'Describe the fetch–decode–execute (FDE) cycle including the role of each component'},
+  {id:'3.1.4',text:'Understand cores, cache and clock speed and explain how each affects CPU performance'},
+  {id:'3.1.5',text:'Understand the purpose and use of an instruction set for a CPU'},
+  {id:'3.1.6',text:'Describe the purpose and characteristics of embedded systems and identify devices where they are used'},
+  {id:'3.2.1',text:'Understand what is meant by an input device and why it is required (including barcode scanner, keyboard, microphone, touchscreen, digital camera, QR scanner, 2D/3D scanner)'},
+  {id:'3.2.2',text:'Understand what is meant by an output device and why it is required (including actuator, DLP projector, inkjet, laser, LED screen, LCD screen, speaker, 3D printer)'},
+  {id:'3.2.3',text:'Understand sensors: purposes, type of data captured, and when each would be used (acoustic, accelerometer, flow, gas, humidity, IR, light, magnetic, moisture, pH, pressure, proximity, temperature)'},
+  {id:'3.3.1',text:'Understand primary storage: RAM and ROM, why a computer needs both and the difference between them'},
+  {id:'3.3.2',text:'Understand secondary storage and describe operation of magnetic (HDD), optical (CD/DVD/Blu-ray) and solid-state (SSD, SD card, USB) storage'},
+  {id:'3.3.3',text:'Describe virtual memory: what it is, how it is created and used and why it is necessary'},
+  {id:'3.3.4',text:'Understand cloud storage and explain advantages and disadvantages compared to local storage'},
+  {id:'3.4.1',text:'Understand that a computer needs a NIC (network interface card) to access a network'},
+  {id:'3.4.2',text:'Understand the purpose of a MAC address including its structure (manufacturer code + serial code, written in hexadecimal)'},
+  {id:'3.4.3',text:'Understand the purpose of IP addresses and that there are different types including IPv4 and IPv6'},
+  {id:'3.4.4',text:'Describe the role of a router in a network (routing packets, assigning IP addresses, connecting to internet)'},
+]},
+{id:'s4',num:'4',name:'Software',paper:1,statements:[
+  {id:'4.1.1',text:'Describe the difference between system software and application software with examples'},
+  {id:'4.1.2',text:'Describe the role and basic functions of an operating system (files, interrupts, interface, peripherals, memory, multitasking, security, user accounts)'},
+  {id:'4.1.3',text:'Understand how hardware, firmware and an OS are required to run applications software'},
+  {id:'4.1.4',text:'Describe the role and operation of interrupts including how they are generated, handled via ISR, and what happens as a result'},
+  {id:'4.2.1',text:'Explain high-level and low-level languages including the advantages and disadvantages of each'},
+  {id:'4.2.2',text:'Understand that assembly language uses mnemonics and an assembler translates it to machine code'},
+  {id:'4.2.3',text:'Describe the operation of a compiler and an interpreter including how high-level code is translated and how errors are reported'},
+  {id:'4.2.4',text:'Explain the advantages and disadvantages of a compiler compared to an interpreter'},
+  {id:'4.2.5',text:'Explain the role of an IDE and its common functions: editor, run-time environment, translators, error diagnostics, auto-completion, auto-correction, prettyprint'},
+]},
+{id:'s5',num:'5',name:'The Internet and Its Uses',paper:1,statements:[
+  {id:'5.1.1',text:'Understand the difference between the internet (infrastructure) and the world wide web (websites/pages)'},
+  {id:'5.1.2',text:'Understand what is meant by a URL (protocol, domain name, web page/file name)'},
+  {id:'5.1.3',text:'Describe the purpose and operation of HTTP and HTTPS'},
+  {id:'5.1.4',text:'Explain the purpose and functions of a web browser (render HTML, bookmarks, history, tabs, cookies, navigation, address bar)'},
+  {id:'5.1.5',text:'Describe how web pages are located, retrieved and displayed when a user enters a URL (browser, IP, DNS, web server, HTML)'},
+  {id:'5.1.6',text:'Explain cookies and how they are used including session cookies and persistent cookies'},
+  {id:'5.2.1',text:'Understand the concept of a digital currency and how digital currencies are used'},
+  {id:'5.2.2',text:'Understand blockchain and how it tracks digital currency transactions (digital ledger, time-stamped, cannot be altered)'},
+  {id:'5.3.1',text:'Describe the processes and aims of cyber security threats: brute-force, data interception, DDoS, hacking, malware (virus, worm, Trojan, spyware, adware, ransomware), pharming, phishing, social engineering'},
+  {id:'5.3.2',text:'Explain how solutions keep data safe: access levels, anti-malware, authentication (username/password, biometrics, 2-step), software updates, firewalls, privacy settings, proxy-servers, SSL'},
+]},
+{id:'s6',num:'6',name:'Automated and Emerging Technologies',paper:1,statements:[
+  {id:'6.1.1',text:'Describe how sensors, microprocessors and actuators collaborate to create automated systems'},
+  {id:'6.1.2',text:'Describe the advantages and disadvantages of an automated system for a given scenario'},
+  {id:'6.2.1',text:'Understand what is meant by robotics and describe the characteristics of a robot (mechanical structure, electrical components, programmable)'},
+  {id:'6.2.2',text:'Understand the roles robots perform and describe the advantages and disadvantages of their use'},
+  {id:'6.3.1',text:'Understand what is meant by artificial intelligence (AI)'},
+  {id:'6.3.2',text:'Describe the main characteristics of AI: data collection, rules for using data, ability to reason, learn and adapt'},
+  {id:'6.3.3',text:'Explain the basic operation and components of AI systems: expert systems (knowledge base, rule base, inference engine, interface) and machine learning'},
+]},
+{id:'s7',num:'7',name:'Algorithm Design and Problem-Solving',paper:2,statements:[
+  {id:'7.1.1',text:'Understand the program development life cycle: analysis, design, coding and testing'},
+  {id:'7.1.2',text:'Understand that every system is made of sub-systems and how problems can be decomposed into inputs, processes, outputs, storage'},
+  {id:'7.1.3',text:'Use different methods to design solutions: structure diagrams, flowcharts, pseudocode'},
+  {id:'7.1.4',text:'Explain the purpose of a given algorithm (state purpose, describe processes)'},
+  {id:'7.2.1',text:'Understand standard methods of solution: linear search, bubble sort, totalling, counting, finding max/min/average values'},
+  {id:'7.2.2',text:'Understand validation checks: range, length, type, presence, format and check digit'},
+  {id:'7.2.3',text:'Understand verification checks: visual check and double entry check'},
+  {id:'7.2.4',text:'Suggest and apply suitable test data: normal, abnormal, extreme and boundary'},
+  {id:'7.2.5',text:'Complete a trace table to document a dry-run of an algorithm (tracking variables, outputs and user prompts at each step)'},
+  {id:'7.2.6',text:'Identify errors in given algorithms and suggest ways of correcting these errors'},
+  {id:'7.2.7',text:'Write and amend algorithms using pseudocode, program code and flowcharts with precision'},
+]},
+{id:'s8',num:'8',name:'Programming',paper:2,statements:[
+  {id:'8.1.1',text:'Declare and use variables and constants'},
+  {id:'8.1.2',text:'Understand and use basic data types: integer, real, char, string, Boolean'},
+  {id:'8.1.3',text:'Understand and use INPUT and OUTPUT'},
+  {id:'8.1.4',text:'Understand and use selection: IF statements and CASE statements'},
+  {id:'8.1.5',text:'Understand and use iteration: count-controlled, pre-condition and post-condition loops'},
+  {id:'8.1.6',text:'Understand and use totalling and counting within loops'},
+  {id:'8.1.7',text:'Understand and use string handling: length, substring, upper, lower (position can be zero or one)'},
+  {id:'8.1.8',text:'Understand and use arithmetic operators: +, –, *, /, ^ (power), MOD, DIV'},
+  {id:'8.1.9',text:'Understand and use relational operators: =, <, <=, >, >=, <> (not equal)'},
+  {id:'8.1.10',text:'Understand and use logical operators: AND, OR, NOT'},
+  {id:'8.1.11',text:'Understand and use nested statements (up to three levels of nesting)'},
+  {id:'8.1.12',text:'Understand procedures, functions and parameters; define and use with or without parameters (up to three)'},
+  {id:'8.1.13',text:'Understand and use local and global variables'},
+  {id:'8.1.14',text:'Understand and use library routines: MOD, DIV, ROUND, RANDOM'},
+  {id:'8.1.15',text:'Understand how to create a maintainable program: meaningful identifiers, commenting, use of procedures/functions'},
+  {id:'8.2.1',text:'Declare and use 1D and 2D arrays (first index can be zero or one, use variables as indexes)'},
+  {id:'8.2.2',text:'Write values into and read values from an array using iteration including nested iteration for 2D arrays'},
+  {id:'8.3.1',text:'Understand the purpose of storing data in a file to be used by a program'},
+  {id:'8.3.2',text:'Open, close and use a file for reading and writing single items and lines of text'},
+]},
+{id:'s9',num:'9',name:'Databases',paper:2,statements:[
+  {id:'9.1.1',text:'Define a single-table database from given data storage requirements including fields and records'},
+  {id:'9.1.2',text:'Suggest suitable data types: text/alphanumeric, character, Boolean, integer, real, date/time'},
+  {id:'9.1.3',text:'Understand the purpose of a primary key and identify a suitable primary key for a given table'},
+  {id:'9.2.1',text:'Read, understand and complete SQL scripts to query data in a single database table'},
+  {id:'9.2.2',text:'Use SQL commands: SELECT, FROM, WHERE, ORDER BY (ASC/DESC), SUM, COUNT, AND, OR'},
+]},
+{id:'s10',num:'10',name:'Boolean Logic',paper:2,statements:[
+  {id:'10.1.1',text:'Identify and use standard symbols for logic gates: NOT, AND, OR, NAND, NOR, XOR (EOR)'},
+  {id:'10.1.2',text:'Define and understand the functions of NOT, AND, OR, NAND, NOR and XOR gates'},
+  {id:'10.2.1',text:'Use logic gates to create logic circuits from a problem statement, logic expression or truth table'},
+  {id:'10.2.2',text:'Complete a truth table from a problem statement, logic expression or logic circuit (up to 3 inputs, 1 output)'},
+  {id:'10.3.1',text:'Write a logic expression from a problem statement, logic circuit or truth table'},
+]}
+];
+
+// Tag AO3 + weight
+SYLLABUS.forEach(sec=>sec.statements.forEach(s=>{
+  s.ao3=AO3.test(s.text); s.weight=s.ao3?1.5:1.0;
+}));
+const ALL=SYLLABUS.flatMap(sec=>sec.statements.map(s=>({...s,sectionName:sec.name,sectionNum:sec.num,paper:sec.paper})));
+
+// ── STATE ──
+let ratings={},prevRatings={},filterVal='all';
+const getRating=id=>ratings[id]||0;
+
+// ── STORAGE ──
+function save(){try{localStorage.setItem('cie0478_2026',JSON.stringify(ratings));}catch(e){}}
+function load(){try{const r=localStorage.getItem('cie0478_2026');if(r)ratings=JSON.parse(r);}catch(e){}}
+
+// ── CSV ──
+function exportCSV(){
+  const rows=['id,topic,paper,statement,ao3,weight,rating'];
+  ALL.forEach(s=>rows.push(`${s.id},${s.sectionNum} ${s.sectionName},Paper ${s.paper},${s.text.replace(/,/g,'|')},${s.ao3},${s.weight},${getRating(s.id)}`));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  a.download='cie0478-review-2026.csv';a.click();
+  showToast('CSV exported ✓');
+}
+function importCSV(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const lines=ev.target.result.split('\n').slice(1);
+      prevRatings={...ratings};let n=0;
+      lines.forEach(l=>{
+        if(!l.trim())return;
+        const p=l.split(',');const id=p[0]?.trim();const v=parseInt(p[6]?.trim());
+        if(id&&!isNaN(v)&&v>=0&&v<=5){ratings[id]=v;n++;}
+      });
+      save();renderAll();showToast(`Imported ${n} ratings ✓`);
+    }catch(err){showToast('Import failed — check file format');}
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
+function resetAll(){ratings={};prevRatings={};save();renderAll();showToast('All ratings reset');}
+
+// ── SCORING ──
+function secScore(sec){
+  const r=sec.statements.filter(s=>getRating(s.id)>0);
+  if(!r.length)return 0;
+  return r.reduce((a,s)=>a+getRating(s.id)*s.weight,0)/r.reduce((a,s)=>a+s.weight,0);
+}
+function secProg(sec){return sec.statements.filter(s=>getRating(s.id)>0).length/sec.statements.length;}
+function overall(){
+  const r=ALL.filter(s=>getRating(s.id)>0);if(!r.length)return 0;
+  return r.reduce((a,s)=>a+getRating(s.id)*s.weight,0)/r.reduce((a,s)=>a+s.weight,0);
+}
+function scCol(s){if(!s)return'var(--text3)';if(s<2.5)return'var(--red)';if(s<3.5)return'var(--amber)';return'var(--green)';}
+function bgrad(s){if(s<2.5)return'linear-gradient(90deg,var(--red),#ff7a93)';if(s<3.5)return'linear-gradient(90deg,var(--amber),#fcd34d)';return'linear-gradient(90deg,var(--green),#34d399)';}
+function lbCol(s){if(!s)return'transparent';if(s<2.5)return'var(--red)';if(s<3.5)return'var(--amber)';return'var(--green)';}
+function trend(id){
+  if(!Object.keys(prevRatings).length)return'';
+  const p=prevRatings[id]||0,c=getRating(id);
+  if(!p&&!c)return'';
+  if(c>p)return'<span style="color:var(--green)">↑</span>';
+  if(c<p)return'<span style="color:var(--red)">↓</span>';
+  return'<span style="color:var(--text3)">→</span>';
+}
+
+// ── RATING ──
+function setRating(id,val){
+  ratings[id]=ratings[id]===val?0:val;
+  save();refreshRow(id);
+  updateSectionCard(SYLLABUS.find(s=>s.statements.some(st=>st.id===id)));
+  updateStats();
+  if(document.getElementById('view-ranking').classList.contains('active'))renderRanking();
+}
+function refreshRow(id){
+  const val=getRating(id);
+  document.getElementById('stars-'+id)?.querySelectorAll('.star-btn').forEach(b=>{
+    b.className='star-btn'+(val>=parseInt(b.dataset.n)?' active-'+val:'');
+  });
+  const row=document.getElementById('row-'+id);
+  if(row){
+    row.querySelector('.syl-lbar').style.background=lbCol(val);
+    row.classList.toggle('rated-0',val===0);
+  }
+}
+
+// ── STATS BAR ──
+function updateStats(){
+  const sc=overall(),pr=ALL.filter(s=>getRating(s.id)>0).length/ALL.length;
+  const weak=ALL.filter(s=>{const r=getRating(s.id);return r>0&&r<=2;}).length;
+  const str=ALL.filter(s=>getRating(s.id)>=4).length;
+  const ao=ALL.filter(s=>s.ao3&&getRating(s.id)>0);
+  const aos=ao.length?ao.reduce((a,s)=>a+getRating(s.id),0)/ao.length:0;
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Overall Score</div>
+      <div class="stat-value" style="color:${scCol(sc)}">${sc?sc.toFixed(1):'—'}</div>
+      <div class="stat-sub">weighted avg / 5</div>
+      <div class="pb"><div class="pb-fill" style="width:${sc/5*100}%"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Progress</div>
+      <div class="stat-value" style="color:var(--acc)">${Math.round(pr*100)}<span style="font-size:13px;color:var(--text3)">%</span></div>
+      <div class="stat-sub">${ALL.filter(s=>getRating(s.id)>0).length} / ${ALL.length} rated</div>
+      <div class="pb"><div class="pb-fill" style="width:${pr*100}%"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Needs Work</div>
+      <div class="stat-value" style="color:var(--red)">${weak}</div>
+      <div class="stat-sub">rated 1 or 2</div></div>
+    <div class="stat-card"><div class="stat-label">Confident</div>
+      <div class="stat-value" style="color:var(--green)">${str}</div>
+      <div class="stat-sub">rated 4 or 5</div></div>
+    <div class="stat-card"><div class="stat-label">AO3 Score</div>
+      <div class="stat-value" style="color:var(--ao3)">${aos?aos.toFixed(1):'—'}</div>
+      <div class="stat-sub">describe/explain/compare</div>
+      <div class="pb"><div class="pb-fill" style="width:${aos/5*100}%;background:rgba(251,191,36,.6)"></div></div></div>`;
+}
+
+// ── SECTION CARDS ──
+function buildSections(){
+  const g=document.getElementById('sections-grid');g.innerHTML='';
+  SYLLABUS.forEach(sec=>{
+    const c=document.createElement('div');c.className='section-card';c.id='sec-'+sec.id;
+    c.innerHTML=secHTML(sec);g.appendChild(c);
+    c.querySelector('.section-head').addEventListener('click',()=>c.classList.toggle('open'));
+  });
+}
+function secHTML(sec){
+  const sc=secScore(sec),pr=secProg(sec),rt=sec.statements.filter(s=>getRating(s.id)>0).length;
+  const R=19,ci=2*Math.PI*R,da=pr*ci;
+  const rc=!pr?'var(--text3)':sc<2.5?'var(--red)':sc<3.5?'var(--amber)':'var(--green)';
+  const rows=sec.statements.map(s=>{
+    const v=getRating(s.id);
+    const stars=[1,2,3,4,5].map(n=>`<button class="star-btn${v>=n?' active-'+v:''}" data-n="${n}" onclick="setRating('${s.id}',${n})">${n}</button>`).join('');
+    return `<div class="syl-row${v===0?' rated-0':''}" id="row-${s.id}">
+      <div class="syl-lbar" style="background:${lbCol(v)}"></div>
+      <span class="syl-code">${s.id}</span>
+      <span class="syl-text${s.ao3?' ao3-text':''}">${s.text}</span>
+      ${s.ao3?'<span class="ao3-badge">AO3 ×1.5</span>':''}
+      <span class="syl-trend">${trend(s.id)}</span>
+      <div class="stars" id="stars-${s.id}">${stars}</div>
+    </div>`;
+  }).join('');
+  return `<div class="section-head">
+    <div class="section-ring"><svg width="44" height="44" viewBox="0 0 44 44">
+      <circle class="ring-bg" cx="22" cy="22" r="${R}"/>
+      <circle class="ring-fg" cx="22" cy="22" r="${R}" stroke="${rc}" stroke-dasharray="${ci}" stroke-dashoffset="${ci-da}"/>
+    </svg><div class="ring-label" style="color:${rc}">${Math.round(pr*100)}%</div></div>
+    <div class="section-info">
+      <div class="section-num">Topic ${sec.num} · Paper ${sec.paper}</div>
+      <div class="section-name">${sec.name}</div>
+      <div class="section-meta">
+        <span class="section-score" style="color:${scCol(sc)}">${sc?sc.toFixed(1)+'/5':'Not started'}</span>
+        <span class="section-count">${rt}/${sec.statements.length} rated</span>
+      </div>
+    </div>
+    <div class="section-toggle">▾</div>
+  </div>
+  <div class="section-body">${rows}</div>`;
+}
+function updateSectionCard(sec){
+  if(!sec)return;
+  const c=document.getElementById('sec-'+sec.id);if(!c)return;
+  const wasOpen=c.classList.contains('open');
+  c.innerHTML=secHTML(sec);
+  if(wasOpen)c.classList.add('open');
+  c.querySelector('.section-head').addEventListener('click',()=>c.classList.toggle('open'));
+}
+
+// ── RANKING ──
+function setFilter(f){
+  filterVal=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('f-'+f).classList.add('active');
+  renderRanking();
+}
+function renderRanking(){
+  const q=(document.getElementById('rank-search')?.value||'').toLowerCase();
+  let items=[...ALL];
+  items=items.filter(s=>{
+    const r=getRating(s.id);
+    if(filterVal==='weak')return r>0&&r<=2;
+    if(filterVal==='mid')return r===3;
+    if(filterVal==='strong')return r>=4;
+    if(filterVal==='unreviewed')return r===0;
+    if(filterVal==='ao3')return s.ao3;
+    return true;
+  });
+  if(q)items=items.filter(s=>s.text.toLowerCase().includes(q)||s.id.includes(q)||s.sectionName.toLowerCase().includes(q));
+  items.sort((a,b)=>{
+    const ra=getRating(a.id),rb=getRating(b.id);
+    if(!ra&&!rb)return 0;if(!ra)return 1;if(!rb)return -1;
+    return(ra*a.weight)-(rb*b.weight);
+  });
+  const tb=document.getElementById('rank-body');
+  if(!items.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty">No statements match.</div></td></tr>`;return;}
+  let rank=0;
+  tb.innerHTML=items.map(s=>{
+    const r=getRating(s.id);if(r>0)rank++;
+    return `<tr class="${r===0?'unreviewed':''}">
+      <td class="rank-num">${r?rank:'—'}</td>
+      <td class="rank-score" style="color:${scCol(r)}">${r||'–'}</td>
+      <td class="rank-bar-cell"><div class="rank-bar"><div class="rank-bar-fill" style="width:${r/5*100}%;background:${r?bgrad(r):'var(--text3)'}"></div></div></td>
+      <td class="rank-weight">${s.ao3?'<span class="ao3-badge">×1.5</span>':'<span style="color:var(--text3);font-size:9.5px">×1.0</span>'}</td>
+      <td class="rank-section" title="${s.sectionName}">${s.sectionNum}. ${s.sectionName}</td>
+      <td class="rank-text">${s.text}</td>
+      <td class="rank-trend">${trend(s.id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── PRINT SUMMARY ──
+function renderPrintView(){
+  const sc=overall(),pr=ALL.filter(s=>getRating(s.id)>0).length/ALL.length;
+  const rated=ALL.filter(s=>getRating(s.id)>0).length;
+  const weak=ALL.filter(s=>{const r=getRating(s.id);return r>0&&r<=2;}).length;
+  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+  const secRows=SYLLABUS.map(sec=>{
+    const s=secScore(sec),p=secProg(sec);
+    const bar=s?`<div style="width:100px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:5px"><div style="height:100%;width:${s/5*100}%;background:${bgrad(s)};border-radius:2px"></div></div>`:'';
+    return `<div class="psec-row">
+      <div><span style="color:var(--text3);font-size:9.5px">Topic ${sec.num} · Paper ${sec.paper}</span><br>${sec.name}</div>
+      <div style="text-align:right"><span style="color:${scCol(s)};font-weight:700">${s?s.toFixed(1)+'/5':'Not started'}</span>
+        <span style="color:var(--text3);margin-left:8px;font-size:10px">${Math.round(p*100)}% reviewed</span>${bar}</div>
+    </div>`;
+  }).join('');
+
+  const weakest=[...ALL].filter(s=>getRating(s.id)>0)
+    .sort((a,b)=>(getRating(a.id)*a.weight)-(getRating(b.id)*b.weight)).slice(0,10);
+  const weakRows=weakest.length
+    ?weakest.map((s,i)=>`<div class="pweak">
+      <div class="pweak-top">
+        <span style="color:var(--red);font-weight:700">${getRating(s.id)}/5</span>
+        <span style="color:var(--text3)">[${s.id}]</span>
+        ${s.ao3?'<span class="ao3-badge">AO3 ×1.5</span>':''}
+        <span style="color:var(--text3)">Topic ${s.sectionNum} — ${s.sectionName}</span>
+      </div>
+      <div class="pweak-txt">${s.text}</div>
+    </div>`).join('')
+    :'<p style="color:var(--text3);font-size:11px;font-family:\'DM Mono\',monospace;padding:8px 0">Rate some statements to see your priority areas here.</p>';
+
+  const unrev=SYLLABUS.filter(s=>!secProg(s));
+  const unrevHTML=unrev.length?`<div class="print-card"><h2>Topics Not Yet Started</h2>${unrev.map(s=>`<div class="psec-row"><span>${s.num}. ${s.name}</span><span style="color:var(--text3)">Paper ${s.paper}</span></div>`).join('')}</div>`:'';
+
+  document.getElementById('print-content').innerHTML=`
+    <div class="brand-name" style="margin-bottom:3px">CIE IGCSE Computer Science 0478 · 2026–2028</div>
+    <h1 class="brand-title" style="margin-bottom:5px">Self-Review <em>Summary</em></h1>
+    <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:18px">Generated ${date}</div>
+    <div class="grid3">
+      <div class="mstat"><div class="mstat-v" style="color:${scCol(sc)}">${sc?sc.toFixed(1):'—'}</div><div class="mstat-l">Overall Score</div></div>
+      <div class="mstat"><div class="mstat-v" style="color:var(--acc)">${Math.round(pr*100)}%</div><div class="mstat-l">${rated}/${ALL.length} Reviewed</div></div>
+      <div class="mstat"><div class="mstat-v" style="color:var(--red)">${weak}</div><div class="mstat-l">Rated 1–2</div></div>
+    </div>
+    <div class="print-card"><h2>Topic Scores</h2>${secRows}</div>
+    <div class="print-card"><h2>Top 10 Priority Areas — Weakest First</h2>${weakRows}</div>
+    ${unrevHTML}
+    <div style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <button class="btn btn-ghost" onclick="switchView('overview')" style="margin-left:8px">← Back to Overview</button>
+    </div>`;
+}
+
+// ── VIEW SWITCHING ──
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name)?.classList.add('active');
+  document.querySelector(`.nav-tab[data-view="${name}"]`)?.classList.add('active');
+  if(name==='ranking')renderRanking();
+  if(name==='print-view')renderPrintView();
+}
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>switchView(t.dataset.view));
+});
+
+// ── TOAST ──
+function showToast(m){
+  const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+// ── RENDER ALL ──
+function renderAll(){
+  updateStats();buildSections();
+  if(document.getElementById('view-ranking').classList.contains('active'))renderRanking();
+  if(document.getElementById('view-print-view').classList.contains('active'))renderPrintView();
+}
+
+// ── INIT ──
+load();renderAll();
+</script>
+</body>
+</html>
