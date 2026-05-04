@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB CS — Self Review</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Epilogue:ital,wght@0,300;0,400;0,700;0,900;1,300;1,900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #080b10;
+  --bg1:   #0d1117;
+  --bg2:   #131a23;
+  --bg3:   #1a2232;
+  --bg4:   #1f2a3d;
+  --bdr:   #1e2d42;
+  --bdr2:  #2a3f5c;
+  --bdr3:  #3a5578;
+  --text:  #d4dde8;
+  --text2: #7a91a8;  /* unreviewed — medium readable grey-blue */
+  --text3: #3d5268;  /* labels */
+  --acc:   #00d4ff;
+  --acc2:  #0097c4;
+  --hl:    #ff6b35;
+  --sl:    #22d3a0;
+  --red:   #ff4560;
+  --amber: #f5a623;
+  --green: #1db878;
+  --ao3:   #c9a227;
+  --r:9px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Epilogue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* noise texture */
+body::before{content:'';position:fixed;inset:0;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;pointer-events:none;z-index:0}
+
+/* grid lines */
+body::after{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--bdr) 1px,transparent 1px),linear-gradient(90deg,var(--bdr) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.18;pointer-events:none;z-index:0}
+
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ── HEADER ── */
+.site-header{padding:32px 0 0;border-bottom:1px solid var(--bdr);margin-bottom:28px}
+.site-header .wrap{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:20px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:5px}
+.brand-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc);opacity:.8}
+.brand-title{font-size:34px;font-weight:900;font-style:italic;line-height:1;letter-spacing:-.02em}
+.brand-title span{font-weight:300;font-style:normal;color:var(--text2)}
+
+/* ── SL/HL TOGGLE ── */
+.level-toggle{display:flex;align-items:center;gap:10px;background:var(--bg1);border:1px solid var(--bdr);border-radius:10px;padding:5px}
+.level-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);padding:0 6px}
+.level-btn{padding:7px 20px;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .22s;letter-spacing:.06em}
+.level-btn.sl{background:transparent;color:var(--text2)}.level-btn.sl.active{background:var(--sl);color:#000;box-shadow:0 0 18px rgba(34,211,160,.25)}
+.level-btn.hl{background:transparent;color:var(--text2)}.level-btn.hl.active{background:var(--hl);color:#fff;box-shadow:0 0 18px rgba(255,107,53,.25)}
+
+/* ── ACTION BUTTONS ── */
+.header-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:7px;font-size:11.5px;font-weight:500;cursor:pointer;border:none;font-family:'IBM Plex Mono',monospace;transition:all .18s;white-space:nowrap;letter-spacing:.02em}
+.btn-ghost{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.btn-ghost:hover{border-color:var(--bdr3);color:var(--text)}
+.btn-danger{background:transparent;border:1px solid rgba(255,69,96,.3);color:var(--red)}.btn-danger:hover{background:rgba(255,69,96,.07);border-color:var(--red)}
+
+/* ── NAV TABS ── */
+.nav-tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:24px;overflow-x:auto}
+.nav-tab{padding:9px 18px;font-size:11.5px;font-family:'IBM Plex Mono',monospace;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;position:relative;bottom:-1px;white-space:nowrap;letter-spacing:.04em}
+.nav-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.nav-tab:hover:not(.active){color:var(--text2)}
+
+/* ── HL NOTICE BANNER ── */
+.level-notice{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;margin-bottom:20px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;border:1px solid}
+.level-notice.sl-notice{background:rgba(34,211,160,.06);border-color:rgba(34,211,160,.2);color:var(--sl)}
+.level-notice.hl-notice{background:rgba(255,107,53,.06);border-color:rgba(255,107,53,.2);color:var(--hl)}
+.level-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sl-dot{background:var(--sl)}.hl-dot{background:var(--hl)}
+
+/* ── STATS BAR ── */
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:9px;margin-bottom:24px}
+.stat-card{background:var(--bg1);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 15px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.sc-overall::before{background:linear-gradient(90deg,var(--acc2),var(--acc))}
+.stat-card.sc-prog::before{background:linear-gradient(90deg,var(--sl),#34d399)}
+.stat-card.sc-weak::before{background:var(--red)}
+.stat-card.sc-str::before{background:var(--green)}
+.stat-card.sc-ao3::before{background:var(--ao3)}
+.stat-label{font-size:9.5px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:7px}
+.stat-value{font-size:26px;font-weight:900;font-style:italic;line-height:1;font-family:'Epilogue',sans-serif}
+.stat-sub{font-size:10px;color:var(--text3);margin-top:3px;font-family:'IBM Plex Mono',monospace}
+.pb{margin-top:8px;height:2px;background:var(--bg3);border-radius:1px;overflow:hidden}
+.pb-fill{height:100%;border-radius:1px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+
+/* ── SECTION CARDS ── */
+.sections-grid{display:flex;flex-direction:column;gap:10px}
+.section-card{background:var(--bg1);border:1px solid var(--bdr);border-radius:11px;overflow:hidden;transition:border-color .2s}
+.section-card:hover{border-color:var(--bdr2)}
+.section-head{padding:14px 18px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:background .18s}
+.section-head:hover{background:rgba(255,255,255,.018)}
+.section-ring{position:relative;flex-shrink:0}
+.section-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--bg3);stroke-width:3}
+.ring-fg{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1),stroke .3s}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600}
+.section-info{flex:1;min-width:0}
+.section-strand{font-size:9px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--text3)}
+.section-name{font-size:14.5px;font-weight:700;color:var(--text);margin-top:1px;line-height:1.25}
+.section-meta{display:flex;gap:10px;margin-top:4px;align-items:center;flex-wrap:wrap}
+.section-score{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600}
+.section-count{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.section-hl-count{font-size:9.5px;font-family:'IBM Plex Mono',monospace;color:var(--hl);opacity:.7}
+.section-toggle{color:var(--text3);transition:transform .25s;flex-shrink:0;font-size:11px}
+.section-card.open .section-toggle{transform:rotate(180deg)}
+.section-body{display:none;border-top:1px solid var(--bdr)}
+.section-card.open .section-body{display:block}
+
+/* ── SYLLABUS ROWS ── */
+.syl-row{display:flex;align-items:center;gap:9px;padding:9px 18px;border-bottom:1px solid var(--bdr);transition:background .14s;position:relative}
+.syl-row:last-child{border-bottom:none}
+.syl-row:hover{background:rgba(0,212,255,.022)}
+/* HL-only indicator */
+.syl-row.hl-only-row{border-left:2px solid rgba(255,107,53,.3)}
+/* Unreviewed — readable but clearly lighter */
+.syl-row.rated-0 .syl-text{
+  color:var(--text2);          /* medium blue-grey — clearly readable */
+  font-weight:300;             /* lighter weight for contrast with rated */
+  font-style:italic;           /* subtle cue that it hasn't been touched */
+}
+.syl-row.rated-0 .syl-code{color:var(--text3)}
+.syl-lbar{width:3px;align-self:stretch;border-radius:0 2px 2px 0;flex-shrink:0;min-height:18px;transition:background .3s}
+.syl-code{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text3);min-width:46px;flex-shrink:0;transition:color .3s}
+.syl-text{flex:1;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);line-height:1.6;transition:color .3s,font-weight .3s,font-style .3s}
+.syl-text.ao3-text{color:var(--text)}
+.hl-badge{font-size:8.5px;font-family:'IBM Plex Mono',monospace;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--hl);border-radius:3px;padding:1px 5px;flex-shrink:0;white-space:nowrap}
+.ao3-badge{font-size:8.5px;font-family:'IBM Plex Mono',monospace;background:rgba(201,162,39,.1);border:1px solid rgba(201,162,39,.22);color:var(--ao3);border-radius:3px;padding:1px 5px;flex-shrink:0;white-space:nowrap}
+.syl-trend{font-size:11px;width:14px;text-align:center;flex-shrink:0}
+.stars{display:flex;gap:2px;flex-shrink:0}
+.star-btn{width:23px;height:23px;border-radius:4px;border:1px solid var(--bdr);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10.5px;transition:all .12s;font-family:'IBM Plex Mono',monospace;color:var(--text3)}
+.star-btn:hover{border-color:var(--bdr3);background:var(--bg3);color:var(--text2)}
+.star-btn.active-1,.star-btn.active-2{background:rgba(255,69,96,.18);border-color:rgba(255,69,96,.45);color:var(--red)}
+.star-btn.active-3{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--amber)}
+.star-btn.active-4,.star-btn.active-5{background:rgba(29,184,120,.15);border-color:rgba(29,184,120,.4);color:var(--green)}
+
+/* ── RANKING TABLE ── */
+.rank-controls{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search-input{background:var(--bg1);border:1px solid var(--bdr);border-radius:7px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text);outline:none;width:220px;transition:border-color .2s}
+.search-input:focus{border-color:var(--bdr3)}
+.search-input::placeholder{color:var(--text3)}
+.filter-btn{background:var(--bg1);border:1px solid var(--bdr);border-radius:6px;padding:5px 11px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text2);cursor:pointer;transition:all .18s}
+.filter-btn.active{border-color:var(--acc);color:var(--acc);background:rgba(0,212,255,.06)}
+.rank-table{width:100%;border-collapse:collapse}
+.rank-table th{text-align:left;padding:7px 11px;font-size:9.5px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);border-bottom:1px solid var(--bdr);background:var(--bg1);position:sticky;top:0;z-index:10}
+.rank-table td{padding:8px 11px;border-bottom:1px solid var(--bdr);font-family:'IBM Plex Mono',monospace;font-size:11px;vertical-align:middle}
+.rank-table tr:last-child td{border-bottom:none}
+.rank-table tr:hover td{background:rgba(0,212,255,.018)}
+.rank-table tr.unreviewed td{opacity:.5;font-style:italic}
+.rank-num{color:var(--text3);width:26px}
+.rank-score{font-size:14px;font-weight:700;width:38px}
+.rank-bar-cell{width:90px}
+.rank-bar{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+.rank-section{color:var(--text3);font-size:9.5px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-text{color:var(--text2);font-size:11px;line-height:1.45;max-width:400px}
+.rank-trend{width:20px;text-align:center;font-size:12px}
+.rank-weight{width:50px;text-align:center}
+
+/* ── PRINT VIEW ── */
+.print-summary{max-width:740px}
+.print-card{background:var(--bg1);border:1px solid var(--bdr);border-radius:10px;padding:18px;margin-bottom:14px}
+.print-card h2{font-size:10px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:13px}
+.psec-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+.psec-row:last-child{border-bottom:none}
+.pweak{padding:8px 0;border-bottom:1px solid var(--bdr);font-family:'IBM Plex Mono',monospace}
+.pweak:last-child{border-bottom:none}
+.pweak-top{font-size:10px;display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap}
+.pweak-txt{font-size:11.5px;color:var(--text2);line-height:1.45}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.mstat{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:13px;text-align:center}
+.mstat-v{font-size:28px;font-weight:900;font-style:italic;line-height:1;font-family:'Epilogue',sans-serif}
+.mstat-l{font-size:9.5px;color:var(--text3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.print-level-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;margin-bottom:14px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--bg1);border:1px solid var(--acc);border-radius:9px;padding:8px 13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--acc);z-index:9000;transform:translateY(70px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.toast.on{transform:translateY(0);opacity:1}
+
+.view{display:none}.view.active{display:block}
+#csv-upload{display:none}
+.empty{text-align:center;padding:44px;color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+
+@media print{
+  body{background:#fff;color:#000}
+  body::before,body::after{display:none}
+  .site-header,.nav-tabs,.header-actions,.btn,.stars,.rank-controls,.section-toggle,.syl-trend,.syl-lbar,.level-notice{display:none!important}
+  .section-body,.view{display:block!important}
+  #view-overview,#view-ranking{display:none!important}
+  .section-card,.print-card{border:1px solid #ddd!important;margin-bottom:6px;background:#fff!important}
+  .syl-text,.rank-text,.pweak-txt,.section-name{color:#222!important}
+  .bg1,.bg2{background:#fff!important}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="csv-upload" accept=".csv" onchange="importCSV(event)">
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-eyebrow">IB Diploma Programme · Computer Science</div>
+      <h1 class="brand-title">Self<span>Review</span></h1>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-end">
+      <div class="level-toggle">
+        <span class="level-label">Level:</span>
+        <button class="level-btn sl active" id="btn-sl" onclick="setLevel('SL')">SL</button>
+        <button class="level-btn hl" id="btn-hl" onclick="setLevel('HL')">HL</button>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="document.getElementById('csv-upload').click()">⬆ Import CSV</button>
+        <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="btn btn-ghost" onclick="switchView('print-view')">🖨 Print</button>
+        <button class="btn btn-danger" onclick="if(confirm('Reset ALL ratings?'))resetAll()">↺ Reset</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-view="overview">Overview</div>
+    <div class="nav-tab" data-view="ranking">Ranking Table</div>
+    <div class="nav-tab" data-view="print-view">Print Summary</div>
+  </div>
+
+  <div class="view active" id="view-overview">
+    <div id="level-notice"></div>
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="sections-grid" id="sections-grid"></div>
+  </div>
+
+  <div class="view" id="view-ranking">
+    <div class="rank-controls">
+      <input class="search-input" id="rank-search" placeholder="Search statements…" oninput="renderRanking()">
+      <button class="filter-btn active" id="f-all"        onclick="setFilter('all')">All</button>
+      <button class="filter-btn"        id="f-weak"       onclick="setFilter('weak')">Weak (1–2)</button>
+      <button class="filter-btn"        id="f-mid"        onclick="setFilter('mid')">Mid (3)</button>
+      <button class="filter-btn"        id="f-strong"     onclick="setFilter('strong')">Strong (4–5)</button>
+      <button class="filter-btn"        id="f-unreviewed" onclick="setFilter('unreviewed')">Unreviewed</button>
+      <button class="filter-btn"        id="f-ao3"        onclick="setFilter('ao3')">AO3 ×1.5</button>
+      <button class="filter-btn"        id="f-hl"         onclick="setFilter('hl')">HL only</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rank-table">
+        <thead><tr>
+          <th class="rank-num">#</th>
+          <th style="width:44px">Score</th>
+          <th class="rank-bar-cell">Bar</th>
+          <th class="rank-weight">Weight</th>
+          <th style="width:90px">Topic</th>
+          <th>Statement</th>
+          <th class="rank-trend">Δ</th>
+        </tr></thead>
+        <tbody id="rank-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="view" id="view-print-view">
+    <div class="print-summary" id="print-content"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// AO3 VERB AUTO-DETECTION
+// ════════════════════════════════════════════════════
+const AO3 = /^(describe|explain|evaluate|compare|justify|analyse|analyze|discuss|assess|distinguish|examine|contrast|construct|trace|demonstrate)/i;
+
+// ════════════════════════════════════════════════════
+// IB CS SYLLABUS DATA
+// hlOnly: true = HL students only
+// ════════════════════════════════════════════════════
+const SYLLABUS = [
+// ─── STRAND A ────────────────────────────────────────
+{id:'sA11',strand:'A',num:'A1.1',name:'Computer Hardware and Operation',statements:[
+  {id:'A1.1.1',text:'Describe the functions and interactions of the main CPU components: ALU, CU; registers (IR, PC, MAR, MDR, AC); buses (address, data, control); single/multi-core processors and co-processors',hlOnly:false},
+  {id:'A1.1.2',text:'Describe the role of a GPU and the architecture that makes GPUs suitable for complex computations such as AI, simulations and graphics rendering',hlOnly:false},
+  {id:'A1.1.3',text:'Explain the differences between the CPU and GPU: design philosophy, usage scenarios, core architecture, processing power, memory access, power efficiency, and how CPUs and GPUs work together',hlOnly:true},
+  {id:'A1.1.4',text:'Explain the purposes of different types of primary memory: RAM, ROM, cache (L1, L2, L3), registers; their interaction with the CPU; and the relevance of cache miss and cache hit',hlOnly:false},
+  {id:'A1.1.5',text:'Describe the fetch, decode and execute cycle including basic CPU operations and interaction between memory and registers via the three buses',hlOnly:false},
+  {id:'A1.1.6',text:'Describe the process of pipelining in multi-core architectures including fetch, decode, execute, write-back stages and how cores work independently and in parallel',hlOnly:true},
+  {id:'A1.1.7',text:'Describe internal and external secondary memory storage: SSD, HDD, eMMC (internal); SSD, HDD, optical drives, flash drives, memory cards, NAS (external); and suitable scenarios for each',hlOnly:false},
+  {id:'A1.1.8',text:'Describe the concept of compression: lossy vs lossless methods, run-length encoding and transform coding',hlOnly:true},
+  {id:'A1.1.9',text:'Describe different types of services in cloud computing: SaaS, PaaS, IaaS; and the differences in control, flexibility, resource management and availability',hlOnly:false},
+]},
+{id:'sA12',strand:'A',num:'A1.2',name:'Data Representation and Computer Logic',statements:[
+  {id:'A1.2.1',text:'Describe the principal methods of representing data: integers in binary and hexadecimal; conversion between binary, hexadecimal and decimal in both directions',hlOnly:false},
+  {id:'A1.2.2',text:'Explain how binary is used to store data: fundamentals of binary encoding and how integers, strings, characters, images, audio and video are stored in binary',hlOnly:false},
+  {id:'A1.2.3',text:'Describe the purpose and use of logic gates (AND, OR, NOT, NAND, NOR, XOR, XNOR) and their role in binary computing',hlOnly:false},
+  {id:'A1.2.4',text:'Construct and analyse truth tables: predict outputs of logic circuits, determine outputs from inputs, relate to Boolean expressions, and use Karnaugh maps and algebraic simplification',hlOnly:false},
+  {id:'A1.2.5',text:'Construct logic diagrams using standard symbols for AND, OR, NOT, NAND, NOR, XOR, XNOR gates; combine gates for complex operations; apply Boolean algebra to simplify expressions',hlOnly:false},
+]},
+{id:'sA13',strand:'A',num:'A1.3',name:'Operating Systems and Control Systems',statements:[
+  {id:'A1.3.1',text:'Describe the role of operating systems in abstracting hardware complexities to manage system resources',hlOnly:false},
+  {id:'A1.3.2',text:'Describe the functions of an operating system: memory management, file system, device management, scheduling, security, accounting, GUI, virtualization, networking',hlOnly:false},
+  {id:'A1.3.3',text:'Compare different approaches to scheduling: first-come first-served, round robin, multilevel queue, priority scheduling',hlOnly:false},
+  {id:'A1.3.4',text:'Evaluate the use of polling and interrupt handling considering event frequency, CPU overheads, power source, event predictability, controlled latency and security concerns',hlOnly:false},
+  {id:'A1.3.5',text:'Explain the role of the OS in managing multitasking and resource allocation including task scheduling, resource contention and deadlock',hlOnly:true},
+  {id:'A1.3.6',text:'Describe the use of control system components: input, process, output, feedback (open-loop, closed-loop); controller, sensors, actuators, transducers, control algorithm',hlOnly:true},
+  {id:'A1.3.7',text:'Explain the use of control systems in real-world applications such as autonomous vehicles, thermostats, elevators, washing machines, traffic signals, irrigation, security systems',hlOnly:true},
+]},
+{id:'sA14',strand:'A',num:'A1.4',name:'Translation',statements:[
+  {id:'A1.4.1',text:'Evaluate the translation processes of interpreters and compilers: mechanics, use-cases, error detection, translation time, portability; including JIT compilation and bytecode interpreters',hlOnly:true},
+]},
+{id:'sA21',strand:'A',num:'A2.1',name:'Network Fundamentals',statements:[
+  {id:'A2.1.1',text:'Describe the purpose and characteristics of networks: LAN, WAN, PAN, VPN',hlOnly:false},
+  {id:'A2.1.2',text:'Describe the purpose, benefits and limitations of modern digital infrastructures: internet, cloud computing, distributed systems, edge computing, mobile networks',hlOnly:false},
+  {id:'A2.1.3',text:'Describe the function of network devices: gateways, hardware firewalls, modems, NICs, routers, switches, wireless access points; and how they map to TCP/IP model layers',hlOnly:false},
+  {id:'A2.1.4',text:'Describe the network protocols used for transport and application: TCP, UDP, HTTP, HTTPS, DHCP',hlOnly:false},
+  {id:'A2.1.5',text:'Describe the function of the TCP/IP model: application, transport, internet, network interface layers; the role of each layer and interactions between them',hlOnly:true},
+]},
+{id:'sA22',strand:'A',num:'A2.2',name:'Network Architecture',statements:[
+  {id:'A2.2.1',text:'Describe the functions and practical applications of network topologies: star, mesh, hybrid; considering reliability, transmission speed, scalability, data collisions, cost',hlOnly:false},
+  {id:'A2.2.2',text:'Describe the function of servers: DNS, DHCP, file server, mail server, proxy server, web server; considering function, scalability, reliability and security',hlOnly:true},
+  {id:'A2.2.3',text:'Compare and contrast client-server and peer-to-peer networking models including benefits, drawbacks and real-world applications',hlOnly:false},
+  {id:'A2.2.4',text:'Explain the concepts and applications of network segmentation: performance, security, congestion reduction; including subnetting and VLANs',hlOnly:false},
+]},
+{id:'sA23',strand:'A',num:'A2.3',name:'Data Transmissions',statements:[
+  {id:'A2.3.1',text:'Describe different types of IP addressing: IPv4 vs IPv6; public vs private addresses; static vs dynamic addresses; and the role of NAT',hlOnly:false},
+  {id:'A2.3.2',text:'Compare types of media for data transmission: fibre optic, twisted pair cables, wireless; considering bandwidth, installation complexity, cost, range, interference, attenuation, reliability, security',hlOnly:false},
+  {id:'A2.3.3',text:'Explain how packet switching sends data across a network: segmenting data into packets, attaching routing headers, independent transmission, reassembly at destination; roles of switches and routers',hlOnly:false},
+]},
+{id:'sA24',strand:'A',num:'A2.4',name:'Network Security',statements:[
+  {id:'A2.4.1',text:'Discuss the effectiveness of firewalls at protecting a network: inspecting/filtering traffic using whitelists, blacklists and rules; strengths, limitations and the role of NAT',hlOnly:false},
+  {id:'A2.4.2',text:'Describe common network vulnerabilities: DDoS, insecure protocols, malware, MitM attacks, phishing, SQL injection, XSS, unpatched software, weak authentication, zero-day exploits',hlOnly:true},
+  {id:'A2.4.3',text:'Describe common network countermeasures including content security policies, MFA, firewalls, IDS/IPS, SSL/TLS, VPNs, encrypted protocols, input validation, email filtering and MAC whitelists',hlOnly:true},
+  {id:'A2.4.4',text:'Describe the process of encryption and digital certificates: symmetric vs asymmetric cryptography; role of digital certificates; public and private keys; encryption key management',hlOnly:false},
+]},
+{id:'sA31',strand:'A',num:'A3.1',name:'Database Fundamentals',statements:[
+  {id:'A3.1.1',text:'Explain the features, benefits and limitations of a relational database: composite/foreign/primary keys, relationships, tables; concurrency control, data integrity, scalability, security; and limitations including rigid schema and unstructured data handling',hlOnly:false},
+]},
+{id:'sA32',strand:'A',num:'A3.2',name:'Database Design',statements:[
+  {id:'A3.2.1',text:'Describe database schemas: conceptual, logical and physical schemas as abstract definitions of data structure and organization at different levels',hlOnly:false},
+  {id:'A3.2.2',text:'Construct entity-relationship diagrams (ERDs) considering data type consistency and the effects of choosing wrong data types',hlOnly:false},
+  {id:'A3.2.4',text:'Construct tables for relational databases using primary keys, foreign keys, composite keys and concatenated keys; ensuring data integrity',hlOnly:false},
+  {id:'A3.2.5',text:'Explain the difference between normal forms: 1NF, 2NF, 3NF; including atomicity, unique identification, functional dependencies, partial-key and transitive dependencies',hlOnly:false},
+  {id:'A3.2.6',text:'Construct a database normalised to 3NF for a range of real-world scenarios',hlOnly:false},
+  {id:'A3.2.7',text:'Evaluate the need for denormalising databases: advantages and disadvantages; situations where denormalisation enhances performance in read-intensive applications',hlOnly:true},
+]},
+{id:'sA33',strand:'A',num:'A3.3',name:'Database Programming',statements:[
+  {id:'A3.3.1',text:'Outline the differences between DDL and DML within SQL: data definition language vs data manipulation language; SQL statements to define structures or manipulate data',hlOnly:false},
+  {id:'A3.3.2',text:'Construct queries between two tables in SQL using: SELECT, DISTINCT, FROM, WHERE, BETWEEN, ORDER BY, GROUP BY, HAVING, ASC, DESC, JOIN, LIKE with % wildcard, AND, OR, NOT',hlOnly:false},
+  {id:'A3.3.3',text:'Explain how SQL can be used to update data: INSERT INTO, UPDATE SET, DELETE; and the performance implications of updating indexed columns',hlOnly:false},
+  {id:'A3.3.4',text:'Construct calculations using SQL aggregate functions: AVERAGE, COUNT, MAX, MIN, SUM on grouped data',hlOnly:true},
+  {id:'A3.3.5',text:'Describe different database views: virtual views and materialised (snapshot) views; hiding complexity, consistency, security, performance and query simplification',hlOnly:true},
+  {id:'A3.3.6',text:'Describe how transactions maintain data integrity using ACID (atomicity, consistency, isolation, durability) and TCL commands: BEGIN TRANSACTION, COMMIT, ROLLBACK',hlOnly:true},
+]},
+{id:'sA34',strand:'A',num:'A3.4',name:'Alternative Databases and Data Warehouses',statements:[
+  {id:'A3.4.1',text:'Outline the different types of databases: NoSQL, cloud, spatial, in-memory; and their use in e-commerce, GIS, real-time analytics and SaaS scenarios',hlOnly:true},
+  {id:'A3.4.2',text:'Explain the primary objectives of data warehouses: append-only, subject-oriented, integrated, time-variant, non-volatile data optimised for query performance',hlOnly:true},
+  {id:'A3.4.3',text:'Explain the role of OLAP and data mining for business intelligence: classification, clustering, regression, association rule discovery, sequential pattern discovery, anomaly detection',hlOnly:true},
+  {id:'A3.4.4',text:'Describe the features of distributed databases: concurrency control, data consistency, partitioning, security, distribution transparency, fault tolerance, replication, scalability; and role of ACID',hlOnly:true},
+]},
+{id:'sA41',strand:'A',num:'A4.1',name:'Machine Learning Fundamentals',statements:[
+  {id:'A4.1.1',text:'Describe the types of machine learning and their real-world applications: deep learning, reinforcement learning, supervised learning, transfer learning, unsupervised learning',hlOnly:false},
+  {id:'A4.1.2',text:'Describe hardware requirements for machine learning scenarios: standard laptops to ASICs, edge devices, FPGAs, GPUs, TPUs, cloud-based platforms and HPC centres',hlOnly:false},
+]},
+{id:'sA42',strand:'A',num:'A4.2',name:'Data Preprocessing',statements:[
+  {id:'A4.2.1',text:'Describe the significance of data cleaning: impact of data quality on model performance; handling outliers, duplicates, incorrect data, missing data; normalisation and standardisation',hlOnly:true},
+  {id:'A4.2.2',text:'Describe the role of feature selection: retaining the most informative attributes using filter methods, wrapper methods and embedded methods',hlOnly:true},
+  {id:'A4.2.3',text:'Describe the importance of dimensionality reduction: curse of dimensionality including overfitting, computational complexity, data sparsity and memory usage',hlOnly:true},
+]},
+{id:'sA43',strand:'A',num:'A4.3',name:'Machine Learning Approaches',statements:[
+  {id:'A4.3.1',text:'Explain how linear regression predicts continuous outcomes: relationship between predictor and response variables; significance of slope and intercept; r² as a measure of model fit',hlOnly:true},
+  {id:'A4.3.2',text:'Explain how classification techniques in supervised learning predict discrete outcomes: K-NN and decision trees to categorise data based on patterns from labelled data',hlOnly:true},
+  {id:'A4.3.3',text:'Explain the role of hyperparameter tuning: accuracy, precision, recall and F1 score as evaluation metrics; the effect of tuning on performance; overfitting and underfitting',hlOnly:true},
+  {id:'A4.3.4',text:'Describe how clustering techniques in unsupervised learning group data based on feature similarities and their real-world applications',hlOnly:true},
+  {id:'A4.3.5',text:'Describe how association rule learning uncovers relations between attributes in large datasets and its applications in pattern discovery',hlOnly:true},
+  {id:'A4.3.6',text:'Describe how an agent learns in reinforcement learning: cumulative reward, agent–environment interaction, actions, states, rewards, policies, exploration vs exploitation',hlOnly:true},
+  {id:'A4.3.7',text:'Describe the application of genetic algorithms: population, fitness function, selection, crossover, mutation, evaluation, termination; applied to optimisation problems',hlOnly:true},
+  {id:'A4.3.8',text:'Outline the structure and function of ANNs and multi-layer networks: input, weights, bias, activation function; single perceptron and multi-layer perceptron (MLP)',hlOnly:true},
+  {id:'A4.3.9',text:'Describe how CNNs learn spatial hierarchies of features in images: input, convolutional, activation, pooling, fully connected and output layers; effect of layers, kernel size, stride and loss function',hlOnly:true},
+  {id:'A4.3.10',text:'Explain the importance of model selection and comparison in machine learning: algorithm differences based on data, problem nature, complexity and desired outcomes',hlOnly:true},
+]},
+{id:'sA44',strand:'A',num:'A4.4',name:'Ethical Considerations',statements:[
+  {id:'A4.4.1',text:'Discuss the ethical implications of machine learning: accountability, bias, consent, environmental impact, privacy, security, transparency; challenges of biased training data and online ethics',hlOnly:false},
+  {id:'A4.4.2',text:'Discuss ethical aspects of increasing integration of computer technologies into daily life including quantum computing, AR, VR, and pervasive AI on society, rights, privacy and equity',hlOnly:false},
+]},
+
+// ─── STRAND B ────────────────────────────────────────
+{id:'sB11',strand:'B',num:'B1.1',name:'Approaches to Computational Thinking',statements:[
+  {id:'B1.1.1',text:'Construct a problem specification including problem statement, constraints, objectives, input/output specifications and evaluation criteria',hlOnly:false},
+  {id:'B1.1.2',text:'Describe the fundamental concepts of computational thinking: abstraction, algorithmic design, decomposition, pattern recognition',hlOnly:false},
+  {id:'B1.1.3',text:'Explain how applying computational thinking is used to approach and solve problems in computer science (not necessarily involving programming)',hlOnly:false},
+  {id:'B1.1.4',text:'Trace flowcharts for a range of programming algorithms using standard symbols: connector, decision, flowline, input/output, process/operation, start/end',hlOnly:false},
+]},
+{id:'sB21',strand:'B',num:'B2.1',name:'Programming Fundamentals',statements:[
+  {id:'B2.1.1',text:'Construct and trace programs using global and local variables of various data types: Boolean, char, decimal, integer, string',hlOnly:false},
+  {id:'B2.1.2',text:'Construct programs that extract and manipulate substrings: identify, extract, alter, concatenate and replace substrings',hlOnly:false},
+  {id:'B2.1.3',text:'Describe how programs use common exception handling techniques including try/catch (Java) or try/except (Python) and the finally block for managing errors',hlOnly:false},
+  {id:'B2.1.4',text:'Construct and use common debugging techniques: trace tables, breakpoint debugging, print statements, step-by-step code execution',hlOnly:false},
+]},
+{id:'sB22',strand:'B',num:'B2.2',name:'Data Structures',statements:[
+  {id:'B2.2.1',text:'Compare static and dynamic data structures: differences in memory allocation and resizing; advantages and disadvantages considering speed, memory usage and flexibility',hlOnly:false},
+  {id:'B2.2.2',text:'Construct programs that apply arrays and Lists: 1D and 2D arrays in Java/Python; ArrayLists; add, remove and traverse elements in a dynamic list',hlOnly:false},
+  {id:'B2.2.3',text:'Explain the concept of a stack as a LIFO data structure including push, pop, peek and isEmpty operations and their impact on performance and memory usage',hlOnly:false},
+  {id:'B2.2.4',text:'Explain the concept of a queue as a FIFO data structure including enqueue, dequeue, front and isEmpty operations and their impact on performance and memory usage',hlOnly:false},
+]},
+{id:'sB23',strand:'B',num:'B2.3',name:'Programming Constructs',statements:[
+  {id:'B2.3.1',text:'Construct programs that implement the correct sequence of code instructions to meet program objectives; avoiding infinite loops, deadlock and incorrect output',hlOnly:false},
+  {id:'B2.3.2',text:'Construct programs utilising selection structures: if, else, else if/elif; with Boolean operators (AND, OR, NOT) and relational operators (<, <=, >, >=, ==, !=)',hlOnly:false},
+  {id:'B2.3.3',text:'Construct programs that utilise looping structures: counted and conditional loops; using Boolean and relational operators within conditional statements',hlOnly:false},
+  {id:'B2.3.4',text:'Construct functions and apply modularisation: reusable code blocks with different inputs; scope (local vs global); benefits of modularisation',hlOnly:false},
+]},
+{id:'sB24',strand:'B',num:'B2.4',name:'Programming Algorithms',statements:[
+  {id:'B2.4.1',text:'Describe the efficiency of algorithms by calculating Big O notation to analyse time and space complexities and scalability',hlOnly:false},
+  {id:'B2.4.2',text:'Construct and trace algorithms implementing linear search and binary search: differences in efficiency and appropriate use case for each',hlOnly:false},
+  {id:'B2.4.3',text:'Construct and trace bubble sort and selection sort algorithms: time and space complexities (Big O), advantages and disadvantages across various data sets',hlOnly:false},
+  {id:'B2.4.4',text:'Explain the fundamental concept of recursion and its applications: advantages, limitations, recursive algorithms including quicksort, and situations suited to recursion',hlOnly:true},
+  {id:'B2.4.5',text:'Construct and trace simple non-branching recursive algorithms in a programming language',hlOnly:true},
+]},
+{id:'sB25',strand:'B',num:'B2.5',name:'File Processing',statements:[
+  {id:'B2.5.1',text:'Construct code to perform file-processing operations: open sequential files in read/write/append mode; read from and write to files; close files when complete',hlOnly:false},
+]},
+{id:'sB31',strand:'B',num:'B3.1',name:'Fundamentals of OOP for a Single Class',statements:[
+  {id:'B3.1.1',text:'Evaluate the fundamentals of OOP: classes, objects, inheritance, encapsulation, polymorphism; advantages and disadvantages in various scenarios',hlOnly:false},
+  {id:'B3.1.2',text:'Construct a design of classes, methods and behaviour using UML class diagrams to represent class relationships, attributes and methods',hlOnly:false},
+  {id:'B3.1.3',text:'Distinguish between static and non-static variables and methods including usage, scope and when to use instance vs class variables',hlOnly:false},
+  {id:'B3.1.4',text:'Construct code to define classes and instantiate objects including the role of constructors in initialising an object\'s state',hlOnly:false},
+  {id:'B3.1.5',text:'Explain and apply encapsulation and information hiding in OOP: access modifiers (private, public); controlling access; maintaining integrity and security of object state',hlOnly:false},
+]},
+{id:'sB32',strand:'B',num:'B3.2',name:'Fundamentals of OOP for Multiple Classes',statements:[
+  {id:'B3.2.1',text:'Explain and apply inheritance in OOP: hierarchical relationships between parent and child classes; extending classes; impact of access modifiers (private, public, protected, default)',hlOnly:true},
+  {id:'B3.2.2',text:'Construct code to model polymorphism including method overriding (dynamic polymorphism) and maximising code efficiency through static polymorphism',hlOnly:true},
+  {id:'B3.2.3',text:'Explain the concept of abstraction in OOP: significance in modular code development; use of abstract classes to establish common interfaces for sub-classes',hlOnly:true},
+  {id:'B3.2.4',text:'Explain the role of composition and aggregation in class relationships: designing objects using component objects; tight coupling in composition vs independence in aggregation',hlOnly:true},
+  {id:'B3.2.5',text:'Explain commonly used design patterns in OOP: singleton, factory and observer patterns; application in solving recurring programming challenges',hlOnly:true},
+]},
+{id:'sB41',strand:'B',num:'B4.1',name:'Fundamentals of ADTs',statements:[
+  {id:'B4.1.1',text:'Explain the properties and purpose of ADTs in programming: core principles including high-level description of data structures and their associated operations',hlOnly:true},
+  {id:'B4.1.2',text:'Evaluate linked lists (singly, doubly, circular): sketch and implement insertion, deletion, traversal and search; advantages and disadvantages over arrays',hlOnly:true},
+  {id:'B4.1.3',text:'Construct and apply linked lists (singly, doubly, circular): implement insertion, deletion, traversal and search operations',hlOnly:true},
+  {id:'B4.1.4',text:'Explain the structures and properties of BSTs: data organisation; insert, delete, traverse and search nodes; sketch a BST as a tree diagram',hlOnly:true},
+  {id:'B4.1.5',text:'Construct and apply sets as an ADT: characteristics (unordered, unique elements); union, intersection, difference; check membership, add, remove, subset/superset operations',hlOnly:true},
+  {id:'B4.1.6',text:'Explain the core principles of ADTs: hash tables (hashing functions, collision resolution, load factors); sets; HashMap/HashSet in Java; dict/set in Python',hlOnly:true},
+]},
+];
+
+// Auto-tag AO3 + weight
+SYLLABUS.forEach(sec=>sec.statements.forEach(s=>{
+  s.ao3=AO3.test(s.text);
+  s.weight=s.ao3?1.5:1.0;
+}));
+
+// Flat list
+const ALL=SYLLABUS.flatMap(sec=>sec.statements.map(s=>({
+  ...s, sectionName:sec.name, sectionNum:sec.num, strand:sec.strand
+})));
+
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
+let ratings={}, prevRatings={}, filterVal='all', currentLevel='SL';
+const getRating=id=>ratings[id]||0;
+
+// ── Visible statements for current level ──
+function visible(s){ return currentLevel==='HL' || !s.hlOnly; }
+function visibleAll(){ return ALL.filter(visible); }
+function visibleSec(sec){ return sec.statements.filter(visible); }
+
+// ── STORAGE ──
+function save(){
+  try{localStorage.setItem('ibcs_ratings',JSON.stringify(ratings));
+      localStorage.setItem('ibcs_level',currentLevel);}catch(e){}
+}
+function load(){
+  try{
+    const r=localStorage.getItem('ibcs_ratings');
+    if(r)ratings=JSON.parse(r);
+    const l=localStorage.getItem('ibcs_level');
+    if(l)currentLevel=l;
+  }catch(e){}
+}
+
+// ── CSV ──
+function exportCSV(){
+  const rows=['id,section,strand,hlOnly,ao3,weight,rating'];
+  ALL.forEach(s=>rows.push(
+    `${s.id},${s.sectionNum} ${s.sectionName},Strand ${s.strand},${s.hlOnly},${s.ao3},${s.weight},${getRating(s.id)}`
+  ));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  a.download='ib-cs-review.csv';a.click();
+  showToast('CSV exported ✓');
+}
+function importCSV(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const lines=ev.target.result.split('\n').slice(1);
+      prevRatings={...ratings};let n=0;
+      lines.forEach(l=>{
+        if(!l.trim())return;
+        const p=l.split(',');
+        const id=p[0]?.trim();
+        const v=parseInt(p[6]?.trim());
+        if(id&&!isNaN(v)&&v>=0&&v<=5){ratings[id]=v;n++;}
+      });
+      save();renderAll();showToast(`Imported ${n} ratings ✓`);
+    }catch(err){showToast('Import failed — check file format');}
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
+function resetAll(){ratings={};prevRatings={};save();renderAll();showToast('All ratings reset');}
+
+// ── LEVEL TOGGLE ──
+function setLevel(l){
+  currentLevel=l;
+  document.getElementById('btn-sl').classList.toggle('active',l==='SL');
+  document.getElementById('btn-hl').classList.toggle('active',l==='HL');
+  save();renderAll();
+}
+
+// ── SCORING — only counts visible statements ──
+function secScore(sec){
+  const rated=visibleSec(sec).filter(s=>getRating(s.id)>0);
+  if(!rated.length)return 0;
+  const ws=rated.reduce((a,s)=>a+getRating(s.id)*s.weight,0);
+  const tw=rated.reduce((a,s)=>a+s.weight,0);
+  return tw?ws/tw:0;
+}
+function secProg(sec){
+  const vs=visibleSec(sec);
+  if(!vs.length)return 0;
+  return vs.filter(s=>getRating(s.id)>0).length/vs.length;
+}
+function overallScore(){
+  const va=visibleAll();
+  const rated=va.filter(s=>getRating(s.id)>0);
+  if(!rated.length)return 0;
+  const ws=rated.reduce((a,s)=>a+getRating(s.id)*s.weight,0);
+  const tw=rated.reduce((a,s)=>a+s.weight,0);
+  return tw?ws/tw:0;
+}
+function overallProg(){
+  const va=visibleAll();
+  return va.length?va.filter(s=>getRating(s.id)>0).length/va.length:0;
+}
+function scCol(s){if(!s)return'var(--text3)';if(s<2.5)return'var(--red)';if(s<3.5)return'var(--amber)';return'var(--green)';}
+function bgrad(s){if(s<2.5)return'linear-gradient(90deg,var(--red),#ff8fa3)';if(s<3.5)return'linear-gradient(90deg,var(--amber),#fcd34d)';return'linear-gradient(90deg,var(--green),#4ade80)';}
+function lbCol(s){if(!s)return'transparent';if(s<2.5)return'var(--red)';if(s<3.5)return'var(--amber)';return'var(--green)';}
+function trendArrow(id){
+  if(!Object.keys(prevRatings).length)return'';
+  const p=prevRatings[id]||0,c=getRating(id);
+  if(!p&&!c)return'';
+  if(c>p)return'<span style="color:var(--green)">↑</span>';
+  if(c<p)return'<span style="color:var(--red)">↓</span>';
+  return'<span style="color:var(--text3)">→</span>';
+}
+
+// ── RATING ──
+function setRating(id,val){
+  ratings[id]=ratings[id]===val?0:val;
+  save();refreshRow(id);
+  updateSectionCard(SYLLABUS.find(s=>s.statements.some(st=>st.id===id)));
+  updateStats();
+  if(document.getElementById('view-ranking').classList.contains('active'))renderRanking();
+}
+function refreshRow(id){
+  const val=getRating(id);
+  document.getElementById('stars-'+id)?.querySelectorAll('.star-btn').forEach(b=>{
+    b.className='star-btn'+(val>=parseInt(b.dataset.n)?' active-'+val:'');
+  });
+  const row=document.getElementById('row-'+id);
+  if(row){
+    row.querySelector('.syl-lbar').style.background=lbCol(val);
+    row.classList.toggle('rated-0',val===0);
+  }
+}
+
+// ── STATS BAR ──
+function updateStats(){
+  const sc=overallScore(),pr=overallProg();
+  const va=visibleAll();
+  const rated=va.filter(s=>getRating(s.id)>0).length;
+  const weak=va.filter(s=>{const r=getRating(s.id);return r>0&&r<=2;}).length;
+  const str=va.filter(s=>getRating(s.id)>=4).length;
+  const ao=va.filter(s=>s.ao3&&getRating(s.id)>0);
+  const aos=ao.length?ao.reduce((a,s)=>a+getRating(s.id),0)/ao.length:0;
+
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-card sc-overall">
+      <div class="stat-label">Overall Score</div>
+      <div class="stat-value" style="color:${scCol(sc)}">${sc?sc.toFixed(1):'—'}</div>
+      <div class="stat-sub">weighted avg / 5</div>
+      <div class="pb"><div class="pb-fill" style="width:${sc/5*100}%;background:linear-gradient(90deg,var(--acc2),var(--acc))"></div></div>
+    </div>
+    <div class="stat-card sc-prog">
+      <div class="stat-label">Progress</div>
+      <div class="stat-value" style="color:var(--${currentLevel==='SL'?'sl':'hl'})">${Math.round(pr*100)}<span style="font-size:13px;color:var(--text3)">%</span></div>
+      <div class="stat-sub">${rated} / ${va.length} rated</div>
+      <div class="pb"><div class="pb-fill" style="width:${pr*100}%;background:var(--${currentLevel==='SL'?'sl':'hl'})"></div></div>
+    </div>
+    <div class="stat-card sc-weak">
+      <div class="stat-label">Needs Work</div>
+      <div class="stat-value" style="color:var(--red)">${weak}</div>
+      <div class="stat-sub">rated 1 or 2</div>
+    </div>
+    <div class="stat-card sc-str">
+      <div class="stat-label">Confident</div>
+      <div class="stat-value" style="color:var(--green)">${str}</div>
+      <div class="stat-sub">rated 4 or 5</div>
+    </div>
+    <div class="stat-card sc-ao3">
+      <div class="stat-label">AO3 Score</div>
+      <div class="stat-value" style="color:var(--ao3)">${aos?aos.toFixed(1):'—'}</div>
+      <div class="stat-sub">explain/evaluate/compare</div>
+      <div class="pb"><div class="pb-fill" style="width:${aos/5*100}%;background:var(--ao3)"></div></div>
+    </div>`;
+
+  // Level notice
+  const isHL=currentLevel==='HL';
+  const hlCount=ALL.filter(s=>s.hlOnly).length;
+  document.getElementById('level-notice').innerHTML=`
+    <div class="level-notice ${isHL?'hl-notice':'sl-notice'}">
+      <div class="level-dot ${isHL?'hl-dot':'sl-dot'}"></div>
+      ${isHL
+        ? `Showing <strong>all ${ALL.length} statements</strong> — HL includes ${hlCount} HL-only items marked with an orange tag.`
+        : `Showing <strong>${ALL.filter(s=>!s.hlOnly).length} SL statements</strong> — ${hlCount} HL-only items are hidden and excluded from your score. Switch to HL above to reveal them.`
+      }
+    </div>`;
+}
+
+// ── SECTION CARDS ──
+function buildSections(){
+  const g=document.getElementById('sections-grid');g.innerHTML='';
+  SYLLABUS.forEach(sec=>{
+    const vs=visibleSec(sec);
+    if(!vs.length)return; // hide section entirely if no visible statements for SL
+    const c=document.createElement('div');c.className='section-card';c.id='sec-'+sec.id;
+    c.innerHTML=secHTML(sec);g.appendChild(c);
+    c.querySelector('.section-head').addEventListener('click',()=>c.classList.toggle('open'));
+  });
+}
+function secHTML(sec){
+  const vs=visibleSec(sec);
+  const sc=secScore(sec),pr=secProg(sec);
+  const rated=vs.filter(s=>getRating(s.id)>0).length;
+  const R=19,ci=2*Math.PI*R,da=pr*ci;
+  const rc=!pr?'var(--text3)':sc<2.5?'var(--red)':sc<3.5?'var(--amber)':'var(--green)';
+  const hlCount=sec.statements.filter(s=>s.hlOnly).length;
+  const rows=vs.map(s=>{
+    const v=getRating(s.id);
+    const stars=[1,2,3,4,5].map(n=>
+      `<button class="star-btn${v>=n?' active-'+v:''}" data-n="${n}" onclick="setRating('${s.id}',${n})">${n}</button>`
+    ).join('');
+    return `<div class="syl-row${v===0?' rated-0':''}${s.hlOnly?' hl-only-row':''}" id="row-${s.id}">
+      <div class="syl-lbar" style="background:${lbCol(v)}"></div>
+      <span class="syl-code">${s.id}</span>
+      <span class="syl-text${s.ao3?' ao3-text':''}">${s.text}</span>
+      ${s.hlOnly?'<span class="hl-badge">HL</span>':''}
+      ${s.ao3?'<span class="ao3-badge">AO3 ×1.5</span>':''}
+      <span class="syl-trend">${trendArrow(s.id)}</span>
+      <div class="stars" id="stars-${s.id}">${stars}</div>
+    </div>`;
+  }).join('');
+  return `<div class="section-head">
+    <div class="section-ring"><svg width="44" height="44" viewBox="0 0 44 44">
+      <circle class="ring-bg" cx="22" cy="22" r="${R}"/>
+      <circle class="ring-fg" cx="22" cy="22" r="${R}" stroke="${rc}" stroke-dasharray="${ci}" stroke-dashoffset="${ci-da}"/>
+    </svg><div class="ring-pct" style="color:${rc}">${Math.round(pr*100)}%</div></div>
+    <div class="section-info">
+      <div class="section-strand">Strand ${sec.strand} · ${sec.num}</div>
+      <div class="section-name">${sec.name}</div>
+      <div class="section-meta">
+        <span class="section-score" style="color:${scCol(sc)}">${sc?sc.toFixed(1)+'/5':'Not started'}</span>
+        <span class="section-count">${rated}/${vs.length} rated</span>
+        ${currentLevel==='HL'&&hlCount?`<span class="section-hl-count">${hlCount} HL-only</span>`:''}
+      </div>
+    </div>
+    <div class="section-toggle">▾</div>
+  </div>
+  <div class="section-body">${rows}</div>`;
+}
+function updateSectionCard(sec){
+  if(!sec)return;
+  const c=document.getElementById('sec-'+sec.id);if(!c)return;
+  const wasOpen=c.classList.contains('open');
+  c.innerHTML=secHTML(sec);
+  if(wasOpen)c.classList.add('open');
+  c.querySelector('.section-head').addEventListener('click',()=>c.classList.toggle('open'));
+}
+
+// ── RANKING TABLE ──
+function setFilter(f){
+  filterVal=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('f-'+f).classList.add('active');
+  renderRanking();
+}
+function renderRanking(){
+  const q=(document.getElementById('rank-search')?.value||'').toLowerCase();
+  let items=visibleAll();
+  items=items.filter(s=>{
+    const r=getRating(s.id);
+    if(filterVal==='weak')return r>0&&r<=2;
+    if(filterVal==='mid')return r===3;
+    if(filterVal==='strong')return r>=4;
+    if(filterVal==='unreviewed')return r===0;
+    if(filterVal==='ao3')return s.ao3;
+    if(filterVal==='hl')return s.hlOnly;
+    return true;
+  });
+  if(q)items=items.filter(s=>
+    s.text.toLowerCase().includes(q)||s.id.toLowerCase().includes(q)||s.sectionName.toLowerCase().includes(q)
+  );
+  items.sort((a,b)=>{
+    const ra=getRating(a.id),rb=getRating(b.id);
+    if(!ra&&!rb)return 0;if(!ra)return 1;if(!rb)return-1;
+    return(ra*a.weight)-(rb*b.weight);
+  });
+  const tb=document.getElementById('rank-body');
+  if(!items.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty">No statements match.</div></td></tr>`;return;}
+  let rank=0;
+  tb.innerHTML=items.map(s=>{
+    const r=getRating(s.id);if(r>0)rank++;
+    return `<tr class="${r===0?'unreviewed':''}">
+      <td class="rank-num">${r?rank:'—'}</td>
+      <td class="rank-score" style="color:${scCol(r)}">${r||'–'}</td>
+      <td class="rank-bar-cell"><div class="rank-bar"><div class="rank-bar-fill" style="width:${r/5*100}%;background:${r?bgrad(r):'var(--text3)'}"></div></div></td>
+      <td class="rank-weight">
+        ${s.hlOnly?'<span class="hl-badge">HL</span>':''}
+        ${s.ao3?'<span class="ao3-badge">×1.5</span>':'<span style="color:var(--text3);font-size:9.5px">×1.0</span>'}
+      </td>
+      <td class="rank-section" title="${s.sectionName}">${s.sectionNum}</td>
+      <td class="rank-text">${s.text}</td>
+      <td class="rank-trend">${trendArrow(s.id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── PRINT SUMMARY ──
+function renderPrintView(){
+  const va=visibleAll();
+  const sc=overallScore(),pr=va.filter(s=>getRating(s.id)>0).length/va.length;
+  const rated=va.filter(s=>getRating(s.id)>0).length;
+  const weak=va.filter(s=>{const r=getRating(s.id);return r>0&&r<=2;}).length;
+  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const lvlCol=currentLevel==='SL'?'var(--sl)':'var(--hl)';
+
+  const secRows=SYLLABUS.map(sec=>{
+    const vs=visibleSec(sec);if(!vs.length)return'';
+    const s=secScore(sec),p=secProg(sec);
+    const bar=s?`<div style="width:90px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:4px"><div style="height:100%;width:${s/5*100}%;background:${bgrad(s)};border-radius:2px"></div></div>`:'';
+    return `<div class="psec-row">
+      <div><span style="color:var(--text3);font-size:9.5px">Strand ${sec.strand} · ${sec.num}</span><br>${sec.name}</div>
+      <div style="text-align:right">
+        <span style="color:${scCol(s)};font-weight:700">${s?s.toFixed(1)+'/5':'Not started'}</span>
+        <span style="color:var(--text3);margin-left:8px;font-size:10px">${Math.round(p*100)}% reviewed</span>
+        ${bar}
+      </div>
+    </div>`;
+  }).join('');
+
+  const weakest=[...va].filter(s=>getRating(s.id)>0)
+    .sort((a,b)=>(getRating(a.id)*a.weight)-(getRating(b.id)*b.weight)).slice(0,10);
+  const weakRows=weakest.length
+    ?weakest.map(s=>`<div class="pweak">
+      <div class="pweak-top">
+        <span style="color:var(--red);font-weight:700">${getRating(s.id)}/5</span>
+        <span style="color:var(--text3)">[${s.id}]</span>
+        ${s.hlOnly?'<span class="hl-badge">HL</span>':''}
+        ${s.ao3?'<span class="ao3-badge">AO3 ×1.5</span>':''}
+        <span style="color:var(--text3);">${s.sectionNum} — ${s.sectionName}</span>
+      </div>
+      <div class="pweak-txt">${s.text}</div>
+    </div>`).join('')
+    :'<p style="color:var(--text3);font-size:11px;font-family:\'IBM Plex Mono\',monospace;padding:8px 0">Rate some statements to see your priority areas.</p>';
+
+  const unrev=SYLLABUS.filter(sec=>visibleSec(sec).length&&!secProg(sec));
+  const unrevHTML=unrev.length?`<div class="print-card"><h2>Topics Not Yet Started</h2>${unrev.map(s=>`<div class="psec-row"><span>${s.num}. ${s.name}</span><span style="color:var(--text3)">Strand ${s.strand}</span></div>`).join('')}</div>`:'';
+
+  document.getElementById('print-content').innerHTML=`
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em">IB Diploma Programme · Computer Science</div>
+    <h1 style="font-size:28px;font-weight:900;font-style:italic;letter-spacing:-.02em;margin-bottom:5px">Self-Review <span style="font-weight:300;font-style:normal;color:var(--text2)">Summary</span></h1>
+    <div class="print-level-badge" style="background:rgba(${currentLevel==='SL'?'34,211,160':'255,107,53'},.1);border:1px solid ${lvlCol};color:${lvlCol}">
+      <div class="level-dot ${currentLevel==='SL'?'sl-dot':'hl-dot'}"></div>
+      ${currentLevel} — ${va.length} statements
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:16px">Generated ${date}</div>
+    <div class="grid3">
+      <div class="mstat"><div class="mstat-v" style="color:${scCol(sc)}">${sc?sc.toFixed(1):'—'}</div><div class="mstat-l">Overall Score</div></div>
+      <div class="mstat"><div class="mstat-v" style="color:${lvlCol}">${Math.round(pr*100)}%</div><div class="mstat-l">${rated}/${va.length} Reviewed</div></div>
+      <div class="mstat"><div class="mstat-v" style="color:var(--red)">${weak}</div><div class="mstat-l">Rated 1–2</div></div>
+    </div>
+    <div class="print-card"><h2>Section Scores</h2>${secRows}</div>
+    <div class="print-card"><h2>Top 10 Priority Areas — Weakest First</h2>${weakRows}</div>
+    ${unrevHTML}
+    <div style="margin-top:14px;display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save PDF</button>
+      <button class="btn btn-ghost" onclick="switchView('overview')">← Back to Overview</button>
+    </div>`;
+}
+
+// ── VIEW SWITCHING ──
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name)?.classList.add('active');
+  document.querySelector(`.nav-tab[data-view="${name}"]`)?.classList.add('active');
+  if(name==='ranking')renderRanking();
+  if(name==='print-view')renderPrintView();
+}
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>switchView(t.dataset.view));
+});
+
+// ── TOAST ──
+function showToast(m){
+  const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+// ── RENDER ALL ──
+function renderAll(){
+  updateStats();buildSections();
+  if(document.getElementById('view-ranking').classList.contains('active'))renderRanking();
+  if(document.getElementById('view-print-view').classList.contains('active'))renderPrintView();
+}
+
+// ── INIT ──
+load();
+document.getElementById('btn-sl').classList.toggle('active',currentLevel==='SL');
+document.getElementById('btn-hl').classList.toggle('active',currentLevel==='HL');
+renderAll();
+</script>
+</body>
+</html>
